@@ -7,6 +7,7 @@ require_once 'Vue.php';
 class Routeur
 {
     // Route une requête entrante : exécute l'action associée
+
     public function routerRequete()
     {
         try {
@@ -32,12 +33,11 @@ class Routeur
             $controleur = ucfirst(strtolower($controleur));
         }
         // Création du nom du fichier du contrôleur
-        $classeControleur = "Controleur" . $controleur;
-        $fichierControleur = "Controleur/" . $classeControleur . ".php";
+        $fichierControleur = "Controleur/" . $controleur . ".php";
         if (file_exists($fichierControleur)) {
             // Instanciation du contrôleur adapté à la requête
             require($fichierControleur);
-            $controleur = new $classeControleur();
+            $controleur = new $controleur();
             $controleur->setRequete($requete);
             return $controleur;
         } else
