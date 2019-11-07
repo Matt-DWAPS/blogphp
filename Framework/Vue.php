@@ -1,5 +1,4 @@
 <?php
-require_once 'Configuration.php';
 class Vue {
 
   // Nom du fichier associé à la vue
