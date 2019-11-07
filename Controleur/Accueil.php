@@ -2,7 +2,7 @@
 
 require_once 'Framework/Controleur.php';
 
-class ControleurAccueil extends Controleur
+class Accueil extends Controleur
 {
     public function index()
     {
