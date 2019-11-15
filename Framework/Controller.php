@@ -1,31 +1,31 @@
 <?php
 require_once 'Configuration.php';
-require_once 'Requete.php';
+require_once 'Request.php';
 require_once 'Vue.php';
 
-abstract class Controleur
+abstract class Controller
 {
     // Action à réaliser
     private $action;
 
     // Requête entrante
-    protected $requete;
+    protected $request;
 
     // Définit la requête entrante
-    public function setRequete(Requete $requete)
+    public function setRequest(Request $request)
     {
-        $this->requete = $requete;
+        $this->request = $request;
     }
 
     // Exécute l'action à réaliser
-    public function executerAction($action)
+    public function executeAction($action)
     {
         if (method_exists($this, $action)) {
             $this->action = $action;
             $this->{$this->action}();
         } else {
-            $classeControleur = get_class($this);
-            throw new Exception("Action '$action' non définie dans la classe $classeControleur");
+            $classController = get_class($this);
+            throw new Exception("Action '$action' non définie dans la classe $classController");
         }
     }
 
@@ -34,13 +34,13 @@ abstract class Controleur
     public abstract function index();
 
     // Génère la vue associée au contrôleur courant
-    protected function genererVue($donneesVue = array())
+    protected function genererateView($dataView = array())
     {
         // Détermination du nom du fichier vue à partir du nom du contrôleur actuel
-        $classeControleur = get_class($this);
-        $controleur = str_replace("Controleur", "", $classeControleur);
+        $classController = get_class($this);
+        $controller = str_replace("Controller", "", $classController);
         // Instanciation et génération de la vue
-        $vue = new Vue($this->action, $controleur);
-        $vue->generer($donneesVue);
+        $vue = new Vue($this->action, $controller);
+        $vue->genererate($dataView);
     }
 }

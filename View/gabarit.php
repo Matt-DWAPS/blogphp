@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="MatthieuJ">
-    <base href="<?= $racineWeb ?>" >
+    <base href="<?=$racineWeb ?>" >
 
     <title><?= $titre ?></title>
 
@@ -48,13 +48,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="contact.php">Contact</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="subscribe.php">Inscription</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Connexion</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('img/home-bg.jpg')">
+<header class="masthead" style="background-image: url('content/img/home-bg.jpg')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
