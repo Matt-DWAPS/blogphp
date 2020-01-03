@@ -1,7 +1,7 @@
 <?php
 require_once 'Configuration.php';
 require_once 'Request.php';
-require_once 'Vue.php';
+require_once 'View.php';
 
 abstract class Controller
 {
@@ -34,13 +34,13 @@ abstract class Controller
     public abstract function index();
 
     // Génère la vue associée au contrôleur courant
-    protected function genererateView($dataView = array())
+    protected function generateView($dataView = array())
     {
         // Détermination du nom du fichier vue à partir du nom du contrôleur actuel
         $classController = get_class($this);
         $controller = str_replace("Controller", "", $classController);
         // Instanciation et génération de la vue
-        $vue = new Vue($this->action, $controller);
-        $vue->genererate($dataView);
+        $vue = new View($this->action, $controller);
+        $vue->generate($dataView);
     }
 }

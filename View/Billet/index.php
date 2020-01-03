@@ -1,7 +1,7 @@
-<?php $this->titre = "Mon Blog - "; ?>
+<?php $this->title = "Mon Blog - "; ?>
 <article>
     <header>
-        <h1 class="titreBillet"></h1>
+        <h1 class="titleArticle"></h1>
     </header>
-    <p><? $this->billet = $billet['date'] ?></p>
+    <p><? $this->article = $article['date'] ?></p>
 </article>

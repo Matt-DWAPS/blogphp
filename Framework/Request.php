@@ -1,26 +1,28 @@
 <?php
 
-class Requete {
+class Request
+{
+    // paramètres de la requête
+    private $parameters;
 
-  // paramètres de la requête
-  private $parametres;
-
-  public function __construct($parametres) {
-    $this->parametres = $parametres;
-  }
-
-  // Renvoie vrai si le paramètre existe dans la requête
-  public function existeParametre($nom) {
-    return (isset($this->parametres[$nom]) && $this->parametres[$nom] != "");
-  }
-
-  // Renvoie la valeur du paramètre demandé
-  // Lève une exception si le paramètre est introuvable
-  public function getParametre($nom) {
-    if ($this->existeParametre($nom)) {
-      return $this->parametres[$nom];
+    public function __construct($parameters)
+    {
+        $this->parameters = $parameters;
     }
-    else
-      throw new Exception("Paramètre '$nom' absent de la requête");
-  }
+
+    // Renvoie vrai si le paramètre existe dans la requête
+    public function existsParameter($nom)
+    {
+        return (isset($this->parameters[$nom]) && ($this->parameters[$nom] != ""));
+    }
+
+    // Renvoie la valeur du paramètre demandé
+    // Lève une exception si le paramètre est introuvable
+    public function getParameter($nom)
+    {
+        if ($this->existsParameter($nom)) {
+            return $this->parameters[$nom];
+        } else
+            throw new Exception("Paramètre '$nom' absent de la requête");
+    }
 }

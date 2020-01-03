@@ -1,19 +1,19 @@
 <?php
 require_once 'Configuration.php';
 
-abstract class Modele
+abstract class Model
 {
     private static $bdd;
 
-    protected function executerRequete($sql, $params = null)
+    protected function executeRequest($sql, $params = null)
     {
         if ($params === null) {
-            $resultat = self::getBdd()->query($sql);   // exécution directe
+            $result = self::getBdd()->query($sql);   // exécution directe
         } else {
-            $resultat = self::getBdd()->prepare($sql); // requête préparée
-            $resultat->execute($params);
+            $result = self::getBdd()->prepare($sql); // requête préparée
+            $result->execute($params);
         }
-        return $resultat;
+        return $result;
     }
 
     private static function getBdd()
@@ -25,7 +25,9 @@ abstract class Modele
             $mdp = Configuration::get("mdp");
             // Création de la connexion
             self::$bdd = new PDO($dsn, $login, $mdp,
-                array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+                array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+                ));
         }
         return self::$bdd;
     }

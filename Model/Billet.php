@@ -1,30 +1,33 @@
 <?php
 require_once "Framework/Model.php";
 
-class Billet extends Model {
-    public function getBillets($nbStart = null, $nbEnd = null){
-        $sql = 'SELECT * FROM t_billet ORDER BY BIL_ID DESC';
+class Billet extends Model
+{
+    public function getArticles($nbStart = null, $nbEnd = null)
+    {
+        $sql = 'SELECT * FROM article ORDER BY ID DESC';
 
-        if ($nbStart !== null OR $nbEnd !== null){
-            $sql .= "LIMIT ".$nbStart.", ".$nbEnd;
+        if ($nbStart !== null OR $nbEnd !== null) {
+            $sql .= "LIMIT " . $nbStart . ", " . $nbEnd;
         }
-        $billets = $this->executeRequest($sql);
-        return $billets;
+        $articles = $this->executeRequest($sql);
+        return $articles;
     }
 
     /**
-     * @param $idBillet
+     * @param $idArticle
      * @return mixed
      * @throws Exception
      */
-    public function getBillet($idBillet){
+    public function getArticle($idArticle)
+    {
         $sql = 'select BIL_ID as id, BIL_DATE as date,'
-            .'BIL_TITRE as titre, BIL_CONTENT as content from T_BILLET'
-            .'where BIL_ID=?';
-        $billet = $this->executeRequest($sql, array($idBillet));
-        if ($billet->rowCount() > 0)
-            return $billet->fetch();
+            . 'BIL_TITLE as titre, BIL_CONTENT as content from ARTICLE'
+            . 'where BIL_ID=?';
+        $article = $this->executeRequest($sql, array($idArticle));
+        if ($article->rowCount() > 0)
+            return $article->fetch();
         else
-            throw new Exception("Aucun billet ne correspond à l'identifiant '$idBillet'");
+            throw new Exception("Aucun article ne correspond à l'identifiant '$idArticle'");
     }
 }

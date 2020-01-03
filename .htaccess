@@ -1,3 +1,6 @@
-# Réécrit une URL de type xxx/yyy/zzz en index.php?controleur=xxx&action=yyy&id=zzz
+# Réécrit une URL de type xxx/yyy/zzz en index.php?controller=xxx&action=yyy&id=zzz
+# Options +FollowSymlinks
+RewriteBase /
 RewriteEngine on
-RewriteRule ^([a-zA-Z]*)/?([a-zA-Z]*)?/?([a-zA-Z0-9]*)?/?$ index.php?controleur=$1&action=$2&id=$3 [NC,L]
+# blog.com/home/article/1  --> blog.com/index.php?controller='home'&action='article'&id=1
+RewriteRule ^([a-zA-Z]*)?/?([a-zA-Z]*)?/?([0-9]*)?/?$ index.php?controller=$1&action=$2&id=$3 [NC,L]

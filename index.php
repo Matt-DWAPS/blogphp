@@ -1,6 +1,6 @@
 <?php
+session_start();
+require 'Framework/Route.php';
 
-require 'Framework/Routeur.php';
-
-$routeur = new Routeur();
-$routeur->routerRequete();
+$route = new Route();
+$route->routeRequest();
