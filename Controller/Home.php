@@ -1,18 +1,38 @@
 <?php
 
 require_once 'Framework/Controller.php';
+require_once 'Model/Article.php';
 require_once 'Model/User.php';
+require_once 'Services/Validator.php';
 
 class Home extends Controller
 {
+    const STATUS = [
+        'NON ACTIF' => '0',
+        'ACTIF' => '1'
+    ];
+
     const ROLES = [
+        'BANNI' => '0',
+        'VISITEUR' => '10',
         'MEMBER' => '20',
-        'ADMIN' => '99',
+        'ADMIN' => '75',
+        'SUPERADMIN' => '99',
     ];
 
     public function index()
     {
-        $this->generateView([]);
+        $article = new Article();
+        $articles = $article->getAllArticles();
+
+        $this->generateView([
+            'articles' => $articles,
+        ]);
+    }
+
+    public function articles()
+    {
+
     }
 
     public function registration()
@@ -30,8 +50,8 @@ class Home extends Controller
                     if ($user->registerValidate()) {
                         $dateNow = new DateTime();
                         $user->setCreatedAt($dateNow->format('Y-m-d H:i:s'));
-                        $user->setRole(self::ROLES['MEMBER']);
-                        $user->setStatus('0');
+                        $user->setRole(self::ROLES ['VISITEUR']);
+                        $user->setStatus(self::STATUS ['ACTIF']);
                         $user->setToken(null);
                         $user->save();
                         header('Location: /home');
@@ -59,7 +79,7 @@ class Home extends Controller
                 $user->setEmail($post['email']);
                 $user->setPassword($post['password']);
                 if ($user->formLoginValidate()) {
-                    $userBdd = $user->getUserInBdd();
+                    $userBdd = $user->getUserInBdd(self::STATUS['ACTIF']);
                     if ($userBdd) {
                         $user->hydrate($userBdd);
                         if ($user->login()) {
@@ -68,10 +88,11 @@ class Home extends Controller
                             $_SESSION['auth']['role'] = $user->getRole();
                             $_SESSION['auth']['status'] = $user->getStatus();
                             $_SESSION['auth']['created_at'] = $user->getCreatedAt();
+                            $_SESSION['auth']['id'] = $user->getId();
                             /*$_SESSION['auth']['token']= $user->getToken();*/
                             $_SESSION['flash']['alert'] = "success";
                             $_SESSION['flash']['message'] = "Bienvenue";
-                            header('Location: /home');
+                            header('Location: /dashboard');
                             exit();
                         } else {
                             $_SESSION['flash']['alert'] = "danger";

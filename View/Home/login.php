@@ -1,7 +1,6 @@
 <?php $this->title = "Connexion"; ?>
 
     <h2 class="post-title" id="contenu">Connexion</h2>
-
     <form method="post">
         <label for="email">Adresse Email</label>
         <input type="text" id="email" name="email" placeholder="Entrer l'adresse e-mail :"
@@ -15,5 +14,3 @@
         <input type="hidden" name="loginForm" value="login">
         <input type="submit" id="submit" value="Connexion">
     </form>
-
-<?php print_r($_SESSION); ?>

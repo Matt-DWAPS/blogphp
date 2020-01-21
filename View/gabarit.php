@@ -33,23 +33,33 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/home">Accueil</a>
+                    <a class="nav-link" href="/Home">Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/home/about">Plus d'infos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/home/articles">Articles</a>
+                    <a class="nav-link" href="/articles">Articles</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/home/contact">Contact</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/home/login">Connexion</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="home/registration">Inscription</a>
-                </li>
+                <?php if (!isset($_SESSION['auth'])) : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home/login">Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home/registration">Inscription</a>
+                    </li>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['auth'])) : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Mon compte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard/disconnected">Déconnexion</a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>
@@ -72,7 +82,7 @@
 <!-- Main Content -->
 <div class="container">
     <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="col-lg-12 col-md-10 mx-auto">
             <div class="post-preview">
 
                 <?php if (isset($_SESSION['flash'])) : ?>

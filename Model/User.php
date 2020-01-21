@@ -3,7 +3,9 @@ require_once 'Framework/Model.php';
 
 class User extends Model
 {
-    const MAX_LENGTH_USERNAME = 10;
+
+
+    const MAX_LENGTH_USERNAME = 16;
 
     private $id;
     private $username;
@@ -182,15 +184,6 @@ class User extends Model
         }
     }
 
-    public function loginValidate()
-    {
-        $this->getUserInBdd();
-
-        if ($this->checkEmailInBdd() === 0) {
-            return false;
-        }
-        return true;
-    }
 
     public function hydrate($user)
     {
@@ -200,6 +193,7 @@ class User extends Model
         $this->setStatus($user->status);
         $this->setToken($user->token);
         $this->setCreatedAt($user->created_at);
+        $this->setId($user->id);
     }
 
     public function login()
@@ -217,19 +211,27 @@ class User extends Model
         $this->setCPassword(null);
     }
 
-    public function getUserInBdd($status = 1)
+    public function getUserInBdd($status = null)
     {
-        $sql = 'SELECT username, email, password, role, status, created_at FROM user WHERE email= :email AND status= :status';
+        $sql = 'SELECT username, email, password, role, status, created_at, id FROM user WHERE email= :email';/*' AND status= :status';*/
+
+        if ($status !== null) {
+            $sql .= ' AND status = :status';
+            $req = $this->executeRequest($sql, array(
+                'email' => $this->getEmail(),
+                'status' => $status,
+            ));
+            return $req->fetch();
+        }
         $req = $this->executeRequest($sql, array(
             'email' => $this->getEmail(),
-            'status' => $status,
         ));
         return $req->fetch();
     }
 
     private function checkPasswordLogin()
     {
-        if ($this->isEmpty($this->getPassword())) {
+        if (Validator::isEmpty($this->getPassword())) {
             $this->errors++;
             $this->errorsMsg['password'] = "Password vide";
         }
@@ -257,12 +259,12 @@ class User extends Model
 
     private function checkUsername()
     {
-        if ($this->isEmpty($this->getUsername())) {
+        if (Validator::isEmpty($this->getUsername())) {
             $this->errors++;
             $this->errorsMsg['username'] = "Nom d'utilisateur vide";
         }
 
-        if ($this->isToUpper($this->getUsername(), self::MAX_LENGTH_USERNAME)) {
+        if (Validator::isToUpper($this->getUsername(), self::MAX_LENGTH_USERNAME)) {
             $this->errors++;
             $this->errorsMsg['username'] = "Nom d'utilisateur trop long";
         }
@@ -270,12 +272,12 @@ class User extends Model
 
     private function checkEmail()
     {
-        if ($this->isEmpty($this->getEmail())) {
+        if (Validator::isEmpty($this->getEmail())) {
             $this->errors++;
             $this->errorsMsg['email'] = "Email vide";
         }
 
-        if ($this->isNotAnEmail($this->getEmail())) {
+        if (Validator::isNotAnEmail($this->getEmail())) {
             $this->errors++;
             $this->errorsMsg['email'] = "Email non valide";
         }
@@ -283,45 +285,13 @@ class User extends Model
 
     private function checkPassword()
     {
-        if ($this->isEmpty($this->getPassword())) {
+        if (Validator::isEmpty($this->getPassword())) {
             $this->errors++;
             $this->errorsMsg['password'] = "Password vide";
-        } elseif ($this->isEmpty($this->getCPassword()) || $this->isNotIdentic($this->getPassword(), $this->getCPassword())) {
+        } elseif (Validator::isEmpty($this->getCPassword()) || Validator::isNotIdentic($this->getPassword(), $this->getCPassword())) {
             $this->errors++;
             $this->errorsMsg['password'] = "Les deux mots de passe ne sont pas identiques";
         }
-    }
-
-    private function isEmpty($value)
-    {
-        if (empty($value)) {
-            return true;
-        }
-        return false;
-    }
-
-    private function isNotIdentic($value1, $value2)
-    {
-        if ($value1 !== $value2) {
-            return true;
-        }
-        return false;
-    }
-
-    private function isNotAnEmail($value)
-    {
-        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-            return true;
-        }
-        return false;
-    }
-
-    private function isToUpper($value, $number)
-    {
-        if (strlen($value) > $number) {
-            return true;
-        }
-        return false;
     }
 
     public function checkEmailInBdd()
@@ -338,12 +308,20 @@ class User extends Model
         return $req->rowCount();
     }
 
+
     public function checkPasswordInBdd()
     {
         $sql = 'SELECT password FROM user WHERE password=:password';
         $req = $this->executeRequest($sql, array('password' => $this->getPassword()));
         $passwordCorrect = password_verify($_POST['password'], $req['password']);
         return $passwordCorrect->rowCount();
+    }
+
+    public function getAllUserDashboard()
+    {
+        $sql = 'SELECT username, email, password, role, status, created_at FROM user';
+        $req = $this->executeRequest($sql);
+        return $req->fetchAll();
     }
 
     public function save()
@@ -361,5 +339,6 @@ class User extends Model
         ));
 
     }
+
 }
 
