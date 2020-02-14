@@ -172,14 +172,23 @@ class Article extends Model
         return $this->errorsMsg;
     }
 
-    public function getAllArticles($nbStart = null, $nbEnd = null)
+    public function getAllArticles($publish = null, $nbStart = null, $nbEnd = null)
     {
-        $sql = 'SELECT * FROM article ORDER BY ID DESC';
-        /*
-                if ($nbStart !== null OR $nbEnd !== null) {
-                    $sql .= "LIMIT " . $nbStart . ", " . $nbEnd;
-                }
-        */
+        $sql = 'SELECT * FROM article ';
+
+        if ($publish != null) {
+            $sql .= 'WHERE publish =:publish ORDER BY ID DESC ';
+            $req = $this->executeRequest($sql, array(
+                'publish' => $publish,
+            ));
+            return $req->fetchAll();
+        } else {
+            $sql .= 'ORDER BY ID DESC';
+        }
+
+        if ($nbStart !== null OR $nbEnd !== null) {
+            $sql .= "LIMIT " . $nbStart . ", " . $nbEnd;
+        }
         $req = $this->executeRequest($sql);
         return $req->fetchAll();
     }
@@ -193,8 +202,7 @@ class Article extends Model
     {
         $sql = 'SELECT id as id, created_at as date, content as content, title as title, excerpt as excerpt, user_id as user_id from article WHERE id=:id';
         $article = $this->executeRequest($sql, array(
-            'id' => $this->getId(),
-            /*'publish' => $this->getPublish()*/
+            'id' => $articleId,
         ));
         if ($article->rowCount() == 1)
             return $article->fetch();
@@ -225,10 +233,10 @@ class Article extends Model
     public function deleteArticle($articleId)
     {
 
-
         $sql = 'DELETE FROM article WHERE id =:id';
-        $deleteArticle = $this->executeRequest($sql, array($articleId));
-
+        $deleteArticle = $this->executeRequest($sql, array(
+            'id' => $this->getId(),
+        ));
     }
 
     private function checkArticleTitle()
@@ -286,8 +294,13 @@ class Article extends Model
     {
         if (Validator::isToUpper($this->getPictureUrl(), self::MAX_LENGTH)) {
             $this->errors++;
-            $this->errorsMsg['picture'] = "Titre de l'image trop long";
+            $this->errorsMsg['picture_url'] = "Titre de l'image trop long";
         }
+    }
+
+    public function pictureUpload()
+    {
+
     }
 
     public function formArticleUpdateValidate()
