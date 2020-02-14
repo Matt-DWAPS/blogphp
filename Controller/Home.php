@@ -7,32 +7,24 @@ require_once 'Services/Validator.php';
 
 class Home extends Controller
 {
-    const STATUS = [
-        'NON ACTIF' => '0',
-        'ACTIF' => '1'
-    ];
-
-    const ROLES = [
-        'BANNI' => '0',
-        'VISITEUR' => '10',
-        'MEMBER' => '20',
-        'ADMIN' => '75',
-        'SUPERADMIN' => '99',
-    ];
-
     public function index()
     {
         $article = new Article();
-        $articles = $article->getAllArticles();
+        $articles = $article->getAllArticles(self::PUBLISH['PUBLIÉ']);
 
         $this->generateView([
             'articles' => $articles,
         ]);
     }
 
-    public function articles()
+    public function article()
     {
-
+        $article = new Article();
+        $article->setId(filter_input(INPUT_GET, 'id'));
+        $articles = $article->getOneArticle($article->getId());
+        $this->generateView([
+            'articles' => $articles
+        ]);
     }
 
     public function registration()
