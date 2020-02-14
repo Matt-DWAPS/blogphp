@@ -211,9 +211,27 @@ class User extends Model
         $this->setCPassword(null);
     }
 
+    /**
+     * @param $userId
+     * @return mixed
+     * @throws Exception
+     */
+    public function getUser($userId)
+    {
+        $sql = 'SELECT id as id, created_at as created_at, password as password, role as role, status as status, username as username, picture as picture, email as email FROM user WHERE id=:id';
+        $user = $this->executeRequest($sql, array(
+            'id' => $this->getId(),
+        ));
+        if ($user->rowCount() == 1)
+            return $user->fetch();
+        else {
+            throw new Exception("Aucun utilisateur ne correspond à l'identifiant '$userId'");
+        }
+    }
+
     public function getUserInBdd($status = null)
     {
-        $sql = 'SELECT username, email, password, role, status, created_at, id FROM user WHERE email= :email';/*' AND status= :status';*/
+        $sql = 'SELECT username, email, password, role, status, created_at, id FROM user WHERE email= :email';
 
         if ($status !== null) {
             $sql .= ' AND status = :status';
@@ -319,7 +337,7 @@ class User extends Model
 
     public function getAllUserDashboard()
     {
-        $sql = 'SELECT username, email, password, role, status, created_at FROM user';
+        $sql = 'SELECT id, username, email, password, role, status, created_at FROM user';
         $req = $this->executeRequest($sql);
         return $req->fetchAll();
     }
