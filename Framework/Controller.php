@@ -5,6 +5,29 @@ require_once 'View.php';
 
 abstract class Controller
 {
+    const ROLES = [
+        'BANNI' => '0',
+        'VISITEUR' => '10',
+        'MEMBRE' => '20',
+        'ADMIN' => '75',
+        'SUPERADMIN' => '99',
+    ];
+
+    const PUBLISH = [
+        'PUBLIÉ' => 1,
+        'BROUILLON' => 0
+    ];
+
+    const STATUS = [
+        'NON ACTIF' => '0',
+        'ACTIF' => '1'
+    ];
+
+    const COMMENT_STATUS = [
+        'PUBLIÉ' => 1,
+        'EN ATTENTE' => 0
+    ];
+
     // Action à réaliser
     private $action;
 

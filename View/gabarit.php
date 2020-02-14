@@ -17,65 +17,62 @@
           rel='stylesheet' type='text/css'>
     <!-- Custom styles for this template -->
     <link href="css/clean-blog.min.css" rel="stylesheet">
+    <link href="content/stylesheet.css" rel="stylesheet">
+
 
 </head>
 <body>
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-    <div class="container">
-        <a class="navbar-brand" href="/index.php">Blog</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="mainNav"
+">
+<div class="container">
+    <a class="navbar-brand" href="/index.php"><h1>Jean Forteroche</h1></a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarResponsive" aria-controls="navbarResponsive"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/Home">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/home/about">Plus d'infos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/articles">Articles</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/home/contact">Contact</a>
+            </li>
+            <?php if (!isset($_SESSION['auth'])) : ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Home">Accueil</a>
+                    <a class="nav-link" href="/home/login">Connexion</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/home/about">Plus d'infos</a>
+                    <a class="nav-link" href="/home/registration">Inscription</a>
+                </li>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['auth'])) : ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Mon compte</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/articles">Articles</a>
+                    <a class="nav-link" href="/dashboard/disconnected">Déconnexion</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/home/contact">Contact</a>
-                </li>
-                <?php if (!isset($_SESSION['auth'])) : ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/home/login">Connexion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/home/registration">Inscription</a>
-                    </li>
-                <?php endif; ?>
-                <?php if (isset($_SESSION['auth'])) : ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">Mon compte</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard/disconnected">Déconnexion</a>
-                    </li>
-                <?php endif; ?>
-            </ul>
-        </div>
+            <?php endif; ?>
+        </ul>
     </div>
+</div>
 </nav>
 <!-- Page Header -->
-<header class="masthead" style="background-image: url('content/img/home-bg.jpg')">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                <div class="site-heading">
-                    <h1>Jean Rochefort</h1>
-                    <span class="subheading">Blog d'un écriain</span>
-                </div>
-            </div>
-        </div>
+<header class="masthead  m-0">
+
+    <div class="heading">
+        <img width="100%" src="content/img/header.jpg">
     </div>
 </header>
 
@@ -91,8 +88,6 @@
                     </div>
                 <?php endif; ?>
                 <?php unset($_SESSION['flash']); ?>
-
-
                 <!-- Contenu -->
                 <?= $content ?>
             </div>
@@ -132,7 +127,7 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright &copy; Your Website 2019</p>
+                    <p class="copyright text-muted">Copyright &copy; Website 2019</p>
                 </div>
             </div>
         </div>
