@@ -1,6 +1,10 @@
 <?php $this->title = "Espace membre"; ?>
 
 <h2 class="post-title" id="contenu">Mon Compte</h2>
+<?php if (isset($_SESSION['flash'])) : ?>
+    <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
+        <?= $_SESSION['flash']['message']; ?></p>
+<?php endif; ?>
 <div class="tableau border mb-3">
     <table class="table">
         <thead>
@@ -89,45 +93,48 @@
     </div>
 </div>
 <div class="border">
-    <div>
-        <h2 class="text-center">Commentaires en attentes</h2>
-        <?php if (isset($_SESSION['flash'])) : ?>
-            <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
-                <?= $_SESSION['flash']['message']; ?></p>
-        <?php endif; ?>
-        <?php unset($_SESSION['flash']); ?>
-    </div>
-    <table class="table comments mb-0">
-        <thead>
-        <tr>
-            <th scope="col">Date de soumission</th>
-            <th scope="col">Écrit par</th>
-            <th scope="col">Contenu</th>
-            <th scope="col">Article</th>
-            <th scope="col">Valider</th>
-            <th scope="col">Supprimer</th>
-        </tr>
-        </thead>
+    <?php if (empty($comments)) : ?>
+        <div>
+            <h2 class="text-center">Aucun commentaire en attentes</h2>
+            <?php if (isset($_SESSION['flash'])) : ?>
+                <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
+                    <?= $_SESSION['flash']['infos']; ?></p>
+            <?php endif; ?>
+        </div>
+    <?php else: ?>
+        <div>
+            <h2 class="text-center">Commentaires en attentes</h2>
+        </div>
+        <table class="table comments mb-0">
+            <thead>
+            <tr>
+                <th scope="col">Date de soumission</th>
+                <th scope="col">Écrit par</th>
+                <th scope="col">Contenu</th>
+                <th scope="col">Article</th>
+                <th scope="col">Valider</th>
+                <th scope="col">Supprimer</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="border">
+                <?php foreach ($comments
 
-
-        <tbody>
-        <tr class="border">
-
-            <?php foreach ($comments
-
-            as $comment) : ?>
-            <th scope="row"><?= $comment->created_at ?></th>
-            <td><?= $comment->username ?></td>
-            <td><?= $comment->content ?></td>
-            <td><?= $comment->title ?></td>
-            <td>
-                <a class=" btn btn-primary" role="button"
-                   href="<?= "dashboard/validComment/" . $comment->id ?>">Valider</a>
-            </td>
-            <td>
-                <a class=" btn btn-danger" role="button" href="<?= "dashboard/deleteComment/" . $comment->id ?>">Supprimer</a>
-            </td>
-        </tr><?php endforeach; ?>
-        </tbody>
-    </table>
+                as $comment) : ?>
+                <th scope="row"><?= $comment->created_at ?></th>
+                <td><?= $comment->username ?></td>
+                <td><?= $comment->content ?></td>
+                <td><?= $comment->title ?></td>
+                <td>
+                    <a class=" btn btn-primary" role="button"
+                       href="<?= "dashboard/validComment/" . $comment->id ?>">Valider</a>
+                </td>
+                <td>
+                    <a class=" btn btn-danger" role="button"
+                       href="<?= "dashboard/deleteComment/" . $comment->id ?>">Supprimer</a>
+                </td>
+            </tr><?php endforeach; ?>
+            </tbody>
+        </table>
+    <? endif; ?>
 </div>

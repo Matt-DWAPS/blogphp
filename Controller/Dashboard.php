@@ -22,6 +22,7 @@ class Dashboard extends Controller
         $articles = $article->getAllArticles();
         $comment = new Comment();
         $comments = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
+
         $this->generateView([
             'articles' => $articles,
             'users' => $users,
@@ -34,14 +35,14 @@ class Dashboard extends Controller
      */
     public function updateUser()
     {
+
         $roles = self::ROLES;
         $user_status = self::STATUS;
-
+        $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $user = new User();
         $post = isset($_POST) ? $_POST : false;
 
-        $user->setId(filter_input(INPUT_GET, 'id'));
-        $users = $user->getUser($user->getId());
+        $users = $user->getUser($userId);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         }
@@ -94,9 +95,9 @@ class Dashboard extends Controller
 
     public function deleteArticle()
     {
+        $articleId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $article = new Article();
-        $article->setId(filter_input(INPUT_GET, 'id'));
-        $article->deleteArticle($article->getId());
+        $article->deleteArticle($articleId);
         header('Location: /dashboard');
         exit;
     }
@@ -106,11 +107,10 @@ class Dashboard extends Controller
      */
     public function updateArticle()
     {
+        $articleId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $article = new Article();
         $post = isset($_POST) ? $_POST : false;
-
-        $article_id = filter_input(INPUT_GET, 'id');
-        $articles = $article->getOneArticle($article_id);
+        $articles = $article->getOneArticle($articleId);
         if ($articles) {
             $article->hydrate($articles);
         }
@@ -147,8 +147,8 @@ class Dashboard extends Controller
 
     public function validComment()
     {
+        $commentId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $comment = new Comment();
-        $comment->setId(filter_input(INPUT_GET, 'id'));
         $comments = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
         $comment->updateComment(self::COMMENT_STATUS['PUBLIÉ']);
         $_SESSION['flash']['alert'] = "Success";
@@ -159,9 +159,9 @@ class Dashboard extends Controller
 
     public function deleteComment()
     {
+        $commentId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $comment = new Comment();
-        $comment->setId(filter_input(INPUT_GET, 'id'));
-        $comment->deleteComment($comment->getId());
+        $comment->deleteComment($commentId);
         $_SESSION['flash']['alert'] = "Success";
         $_SESSION['flash']['infos'] = "Commentaire supprimé !";
         header('Location: /dashboard');

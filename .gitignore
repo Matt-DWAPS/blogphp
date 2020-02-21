@@ -1,3 +1,6 @@
 /.idea
 /config/dev.ini
 /config/prod.ini
+bdd.sql
+diagrameUML.mwb
+.DS_Store
