@@ -28,16 +28,13 @@ class Articles extends Controller
         $post = isset($_POST) ? $_POST : false;
         $article = new Article();
         $comment = new Comment();
-        //$comment->setArticleId($articleId);
-        //$comment->setId(filter_input(INPUT_GET, 'id'));
         $comments = $comment->getComments($articleId, self::COMMENT_STATUS['PUBLIÉ']);
 
-
-        //$article->setId(filter_input(INPUT_GET, 'id'));
         $articles = $article->getOneArticle($articleId);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['commentForm'] == 'addComment') {
-                $comment->setContent($post['content']);
+                $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING);
+                $comment->setContent($content);
                 $comment->setUserId($post['user_id']);
                 if ($comment->checkCommentValidate()) {
                     $dateNow = new DateTime();
@@ -78,13 +75,13 @@ class Articles extends Controller
     {
         $commentId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $comment = new Comment();
-        $comment->getComment($commentId);
-
+        $commentBdd = $comment->getComment($commentId);
+        if ($commentBdd) {
+            $comment->hydrate($commentBdd);
+        }
         $comment->setStatus(self::COMMENT_STATUS['EN ATTENTE']);
         $comment->updateComment($comment->getStatus());
-
         $comment->setArticleId($comment->getArticleId());
-
 
         $_SESSION['flash']['alert'] = "Success";
         $_SESSION['flash']['message'] = "Nous vous remercions pour le signalement de ce commentaire, il sera examiné prochainement";

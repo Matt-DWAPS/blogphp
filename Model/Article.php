@@ -200,7 +200,7 @@ class Article extends Model
      */
     public function getOneArticle($articleId)
     {
-        $sql = 'SELECT id as id, created_at as date, content as content, title as title, excerpt as excerpt, user_id as user_id from article WHERE id=:id';
+        $sql = 'SELECT id as id, created_at as created_at, content as content, title as title, excerpt as excerpt, user_id as user_id from article WHERE id=:id';
         $article = $this->executeRequest($sql, array(
             'id' => $articleId,
         ));
@@ -349,6 +349,19 @@ class Article extends Model
         $sql = 'SELECT content FROM article WHERE content=:content';
         $req = $this->executeRequest($sql, array('content' => $this->getContent()));
         return $req->rowCount();
+    }
+
+    public function hydrate($article)
+    {
+        $this->setContent($article->content);
+        $this->setCreatedAt($article->created_at);
+        $this->setUserId($article->user_id);
+        $this->setTitle($article->title);
+        $this->setPictureUrl($article->picture_url);
+        $this->setPublish($article->publish);
+        $this->setExcerpt($article->excerpt);
+        $this->setAlternativeText($article->alternative_text);
+        $this->setId($article->id);
     }
 
     public function save()

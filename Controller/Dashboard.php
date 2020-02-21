@@ -109,8 +109,11 @@ class Dashboard extends Controller
         $article = new Article();
         $post = isset($_POST) ? $_POST : false;
 
-        $article->setId(filter_input(INPUT_GET, 'id'));
-        $articles = $article->getOneArticle($article->getId());
+        $article_id = filter_input(INPUT_GET, 'id');
+        $articles = $article->getOneArticle($article_id);
+        if ($articles) {
+            $article->hydrate($articles);
+        }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['articleForm'] == 'updateArticle') {
                 $article->setTitle($post['title']);
@@ -126,6 +129,7 @@ class Dashboard extends Controller
                         $article->setPublish(0);
                     }
                     $article->setUserId($_SESSION['auth']['id']);
+
                     $article->updateArticle();
                     header('Location: /dashboard');
                     exit;
@@ -148,7 +152,7 @@ class Dashboard extends Controller
         $comments = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
         $comment->updateComment(self::COMMENT_STATUS['PUBLIÉ']);
         $_SESSION['flash']['alert'] = "Success";
-        $_SESSION['flash']['message'] = "Commentaire publié !";
+        $_SESSION['flash']['infos'] = "Commentaire approuvé !";
         header('Location: /dashboard');
         exit;
     }
@@ -159,7 +163,7 @@ class Dashboard extends Controller
         $comment->setId(filter_input(INPUT_GET, 'id'));
         $comment->deleteComment($comment->getId());
         $_SESSION['flash']['alert'] = "Success";
-        $_SESSION['flash']['message'] = "Commentaire supprimé !";
+        $_SESSION['flash']['infos'] = "Commentaire supprimé !";
         header('Location: /dashboard');
         exit;
     }

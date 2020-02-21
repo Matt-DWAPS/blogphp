@@ -7,9 +7,30 @@
 
         <p class="text-justify pb-2 p-4"><?= $articles->content ?></p>
         <div class="col">
-            <p class="font-weight-bold">Publié le <?= $articles->date ?></p>
+            <p class="font-weight-bold">Publié le <?= $articles->created_at ?></p>
         </div>
     </div>
+    <?php if (isset($_SESSION['auth'])) : ?>
+        <div>
+            <form method="post" class="border p-2">
+                <label for="username">Nom d'utilisateur : <?php echo($_SESSION['auth']['username']); ?>
+                </label>
+                <br/>
+                <label for="content">Contenu du commentaire :</label>
+                <textarea class="form-control input-lg" rows="4" id="content" name="content"
+                          aria-label="content"><?= isset($post['content']) ? $post['content'] : ''; ?></textarea>
+                <p class="text-danger"><?= isset($errorsMsg['content']) ? $errorsMsg['content'] : ''; ?></p>
+
+                <input type="hidden" name="commentForm" value="addComment">
+                <input class="btn btn-primary" name="publish" type="submit" value="Envoyer">
+            </form>
+        </div>
+    <?php else: ?>
+        <div class="border p-2 text-center">
+            <h3 class="text-center">Identifier vous pour pouvoir posté un commentaire, merci.</h3>
+            <a href="/home/login">Connexion</a> - <a href="/home/registration">Inscription</a>
+        </div>
+    <?php endif; ?>
     <div>
         <h2 class="text-center pb-3"><i><u>Commentaires</u></i></h2>
         <?php if (isset($_SESSION['flash'])) : ?>
@@ -35,27 +56,5 @@
             </div>
         <?php endforeach; ?>
     </div>
-    <?php if (isset($_SESSION['auth'])) : ?>
-        <div>
-            <form method="post" class="border p-2">
-                <label for="username">Nom d'utilisateur : <?php echo($_SESSION['auth']['username']); ?>
-                </label>
-                <br/>
-                <label for="content">Contenu du commentaire :</label>
-                <textarea class="form-control input-lg" rows="4" id="content" name="content"
-                          aria-label="content"><?= isset($post['content']) ? $post['content'] : ''; ?></textarea>
-                <p class="text-danger"><?= isset($errorsMsg['content']) ? $errorsMsg['content'] : ''; ?></p>
-
-                <input type="hidden" name="commentForm" value="addComment">
-                <input class="btn btn-primary" name="publish" type="submit" value="Envoyer">
-            </form>
-        </div>
-    <?php else: ?>
-        <div class="border p-2 text-center">
-            <h3 class="text-center">Identifier vous pour pouvoir posté un commentaire, merci.</h3>
-            <a href="/home/login">Connexion</a> - <a href="/home/registration">Inscription</a>
-        </div>
-    <?php endif; ?>
-
 </div>
 

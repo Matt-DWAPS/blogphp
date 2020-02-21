@@ -145,6 +145,7 @@ class Comment extends Model
         $this->errorsMsg = $errorsMsg;
     }
 
+
     public function checkCommentValidate()
     {
         if (Validator::isEmpty($this->getContent())) {
@@ -219,6 +220,16 @@ class Comment extends Model
             'id' => $this->getId(),
             'status' => $status,
         ));
+    }
+
+    public function hydrate($comment)
+    {
+        $this->setContent($comment->content);
+        $this->setCreatedAt($comment->created_at);
+        $this->setUserId($comment->user_id);
+        $this->setStatus($comment->status);
+        $this->setArticleId($comment->article_id);
+        $this->setId($comment->id);
     }
 
     public function save()
