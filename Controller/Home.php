@@ -30,9 +30,12 @@ class Home extends Controller
         ]);
     }
 
-    public function articles()
+    public function contact()
     {
-
+        
+        $this->generateView([
+            'contact' => $contact,
+        ]);
     }
 
     public function registration()
