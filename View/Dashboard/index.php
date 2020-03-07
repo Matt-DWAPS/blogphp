@@ -96,14 +96,14 @@
     <?php if (empty($comments)) : ?>
         <div>
             <h2 class="text-center">Aucun commentaire en attentes</h2>
-            <?php if (isset($_SESSION['flash'])) : ?>
-                <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
-                    <?= $_SESSION['flash']['infos']; ?></p>
-            <?php endif; ?>
         </div>
     <?php else: ?>
         <div>
             <h2 class="text-center">Commentaires en attentes</h2>
+            <?php if (isset($_SESSION['flash'])) : ?>
+                <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
+                    <?= $_SESSION['flash']['infos']; ?></p>
+            <?php endif; ?>
         </div>
         <table class="table comments mb-0">
             <thead>
@@ -137,4 +137,5 @@
             </tbody>
         </table>
     <? endif; ?>
+    <?php unset($_SESSION['flash']); ?>
 </div>

@@ -108,12 +108,10 @@ class Dashboard extends Controller
     public function updateArticle()
     {
         $articleId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $article = new Article();
         $post = isset($_POST) ? $_POST : false;
-        $articles = $article->getOneArticle($articleId);
-        if ($articles) {
-            $article->hydrate($articles);
-        }
+        $article = new Article();
+        $articleBdd = $article->getOneArticle($articleId);
+        $article->hydrate($articleBdd);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['articleForm'] == 'updateArticle') {
                 $article->setTitle($post['title']);
@@ -124,9 +122,9 @@ class Dashboard extends Controller
                     $dateNow = new DateTime();
                     $article->setCreatedAt($dateNow->format('Y-m-d H:i:s'));
                     if (isset($post['publish'])) {
-                        $article->setPublish(1);
+                        $article->setPublish(self::PUBLISH['PUBLIÉ']);
                     } else {
-                        $article->setPublish(0);
+                        $article->setPublish(self::PUBLISH['BROUILLON']);
                     }
                     $article->setUserId($_SESSION['auth']['id']);
 
@@ -140,7 +138,7 @@ class Dashboard extends Controller
             }
         }
         $this->generateView([
-            'articles' => $articles,
+            'articles' => $article,
             'errorsMsg' => $article->getErrorsMsg(),
         ]);
     }
@@ -148,14 +146,20 @@ class Dashboard extends Controller
     public function validComment()
     {
         $commentId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
         $comment = new Comment();
-        $comments = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
-        $comment->updateComment(self::COMMENT_STATUS['PUBLIÉ']);
+        $commentsPending = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
+        $comment->hydrate($commentsPending);
+
+
+        $comment->updateComment($comment->setStatus(self::COMMENT_STATUS['PUBLIÉ']));
+
         $_SESSION['flash']['alert'] = "Success";
         $_SESSION['flash']['infos'] = "Commentaire approuvé !";
         header('Location: /dashboard');
         exit;
     }
+
 
     public function deleteComment()
     {
