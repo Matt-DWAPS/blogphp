@@ -23,7 +23,7 @@ class Home extends Controller
     public function index()
     {
         $article = new Article();
-        $articles = $article->getAllArticles();
+        $articles = $article->getAllArticles(self::PUBLISH['PUBLIÉ']);
 
         $this->generateView([
             'articles' => $articles,
@@ -32,7 +32,7 @@ class Home extends Controller
 
     public function contact()
     {
-        
+
         $this->generateView([
             'contact' => $contact,
         ]);
