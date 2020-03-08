@@ -29,7 +29,6 @@ class Articles extends Controller
         $article = new Article();
         $comment = new Comment();
         $comments = $comment->getComments($articleId, self::COMMENT_STATUS['PUBLIÉ']);
-
         $articles = $article->getOneArticle($articleId);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['commentForm'] == 'addComment') {
@@ -80,7 +79,7 @@ class Articles extends Controller
             $comment->hydrate($commentBdd);
         }
         $comment->setStatus(self::COMMENT_STATUS['EN ATTENTE']);
-        $comment->updateComment($comment->getStatus());
+        $comment->updateComment($commentId, $comment->getStatus());
         $comment->setArticleId($comment->getArticleId());
 
         $_SESSION['flash']['alert'] = "Success";
