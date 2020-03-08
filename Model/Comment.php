@@ -186,7 +186,7 @@ class Comment extends Model
 
     public function getComments($article_id, $status = null)
     {
-        $sql = 'SELECT comment.id as id, comment.created_at as date, comment.content as content, comment.user_id as user_id, comment.article_id as article_id ,user.username FROM comment INNER JOIN user ON comment.user_id = user.id WHERE comment.article_id=:id';
+        $sql = 'SELECT comment.id as id, comment.created_at as date, comment.content as content, comment.user_id as user_id, comment.article_id as article_id, user.username FROM comment INNER JOIN user ON comment.user_id = user.id WHERE comment.article_id=:id';
 
         if ($status !== null) {
             $sql .= ' AND comment.status=:status ORDER BY comment.created_at DESC';
@@ -209,15 +209,15 @@ class Comment extends Model
     {
         $sql = 'DELETE FROM comment WHERE id=:id';
         $deleteComment = $this->executeRequest($sql, array(
-            'id' => $this->getId(),
+            'id' => $commentId,
         ));
     }
 
-    public function updateComment($status)
+    public function updateComment($commentId, $status)
     {
         $sql = 'UPDATE comment SET status=:status WHERE id=:id';
         $validComment = $this->executeRequest($sql, array(
-            'id' => $this->getId(),
+            'id' => $commentId,
             'status' => $status,
         ));
     }

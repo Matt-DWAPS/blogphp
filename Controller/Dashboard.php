@@ -148,11 +148,7 @@ class Dashboard extends Controller
         $commentId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
         $comment = new Comment();
-        $commentsPending = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
-        $comment->hydrate($commentsPending);
-
-
-        $comment->updateComment($comment->setStatus(self::COMMENT_STATUS['PUBLIÉ']));
+        $comment->updateComment($commentId, self::COMMENT_STATUS['PUBLIÉ']);
 
         $_SESSION['flash']['alert'] = "Success";
         $_SESSION['flash']['infos'] = "Commentaire approuvé !";

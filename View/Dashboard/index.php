@@ -6,9 +6,9 @@
         <?= $_SESSION['flash']['message']; ?></p>
 <?php endif; ?>
 <div class="tableau border mb-3">
+    <h2 class="text-center">Infos Utilisateurs</h2>
     <table class="table">
         <thead>
-        <h2 class="text-center">Infos Utilisateurs</h2>
         <tr>
             <th scope="col" class="text-center">Date d'inscriptions</th>
             <th scope="col">Pseudos</th>
@@ -19,34 +19,44 @@
         </tr>
         </thead>
         <tbody>
-        <tr><?php foreach ($users
-
-            as $user) : ?>
-            <th scope="row" class="text-center"><?= $user->created_at ?></th>
-            <td><?= $user->username ?></td>
-            <td><?= $user->email ?></td>
-            <td>
-                <?php if ($user->role == 20) {
-                    echo "Membre";
-                } elseif ($user->role == 99) {
-                    echo "Super Administrateur";
-                } elseif ($user->role == 10) {
-                    echo "Visiteur";
-                } elseif ($user->role == 0) {
-                    echo "Banni";
-                } elseif ($user->role == 75) {
-                    echo "Administrateur";
-                } ?>
-            </td>
-            <td><?php if ($user->status == 1) {
-                    echo "Actif";
-                } elseif ($user->status == 0) {
-                    echo "Non actif";
-                } ?></td>
-            <td>
-                <a class=" btn btn-primary" role="button" href="<?= "dashboard/updateUser/" . $user->id ?>">Modifier</a>
-            </td>
-        </tr><?php endforeach; ?>
+        <?php foreach ($users as $user) : ?>
+            <tr>
+                <td class="text-center"><?= $user->created_at ?></td>
+                <td><?= $user->username ?></td>
+                <td><?= $user->email ?></td>
+                <td><?php
+                    switch ($user->role) {
+                        case 0:
+                            $role = 'Banni';
+                            break;
+                        case 10:
+                            $role = 'Visiteur';
+                            break;
+                        case 20:
+                            $role = 'Membre';
+                            break;
+                        case 75:
+                            $role = 'Administrateur';
+                            break;
+                        case 99:
+                            $role = 'Super Administrateur';
+                            break;
+                        default:
+                            $role = 'Rôle non défini';
+                    } ?>
+                    <?= $role ?>
+                </td>
+                <td><?php if ($user->status == 1) {
+                        echo "Actif";
+                    } elseif ($user->status == 0) {
+                        echo "Non actif";
+                    } ?></td>
+                <td>
+                    <a class=" btn btn-primary" role="button"
+                       href="<?= "dashboard/updateUser/" . $user->id ?>">Modifier</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
         </tbody>
     </table>
 </div>

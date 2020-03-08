@@ -15,17 +15,17 @@
             <form method="post" class="border p-2">
                 <label for="username">Nom d'utilisateur : <?php echo($_SESSION['auth']['username']); ?>
                 </label>
-                <br/>
-                <label for="content">Contenu du commentaire :</label>
-                <textarea class="form-control input-lg" rows="4" id="content" name="content"
-                          aria-label="content"><?= isset($post['content']) ? $post['content'] : ''; ?></textarea>
-                <p class="text-danger"><?= isset($errorsMsg['content']) ? $errorsMsg['content'] : ''; ?></p>
-
+                <div class="form-group">
+                    <label for="content">Contenu du commentaire :</label>
+                    <textarea class="form-control input-lg" rows="4" id="content" name="content"
+                              aria-label="content"><?= isset($post['content']) ? $post['content'] : ''; ?></textarea>
+                    <p class="text-danger"><?= isset($errorsMsg['content']) ? $errorsMsg['content'] : ''; ?></p>
+                </div>
                 <input type="hidden" name="commentForm" value="addComment">
                 <input class="btn btn-primary" name="publish" type="submit" value="Envoyer">
             </form>
         </div>
-    <?php else: ?>
+    <?php else : ?>
         <div class="border p-2 text-center">
             <h3 class="text-center">Identifier vous pour pouvoir posté un commentaire, merci.</h3>
             <a href="/home/login">Connexion</a> - <a href="/home/registration">Inscription</a>
@@ -44,7 +44,8 @@
 
         <?php foreach ($comments as $comment) : ?>
             <div class="border rounded p-2 mb-2">
-                <p class="m-0 pb-3">Posté le : <?= $comment->date ?></p>
+                <?php $date = new DateTime($comment->date); ?>
+                <p class="m-0 pb-3">Posté le : <?= $date->format('d-m-Y'); ?> à <?= $date->format('h:i:s'); ?></p>
                 <p class="border p-2"><u><?= $comment->username ?></u> Dit
                     : <?= $comment->content ?></p>
 
