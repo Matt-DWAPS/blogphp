@@ -41,7 +41,22 @@ class View
         echo $view;
     }
 
+    public function generateMail($data)
+    {
+        // Génération de la partie spécifique de la vue
+        $content = $this->generateFile($this->file, $data);
+        // On définit une variable locale accessible par la vue pour la racine Web
+        // Il s'agit du chemin vers le site sur le serveur Web
+        // Nécessaire pour les URI de type controleur/action/id
 
+        $webRoot = Configuration::get("webRoot", "/");
+        // Génération du gabarit commun utilisant la partie spécifique
+        $view = $this->generateFile('View/Mails/gabarit.php',
+            array('title' => $this->title, 'content' => $content,
+                'webRoot' => $webRoot));
+        // Renvoi de la vue générée au navigateur
+        return $view;
+    }
 
     // Génère un fichier vue et renvoie le résultat produit
 

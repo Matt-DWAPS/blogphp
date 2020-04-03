@@ -3,7 +3,9 @@
 require_once 'Framework/Controller.php';
 require_once 'Model/Article.php';
 require_once 'Model/User.php';
+require_once 'Model/Mailer.php';
 require_once 'Services/Validator.php';
+require_once './vendor/autoload.php';
 
 class Home extends Controller
 {
@@ -11,6 +13,8 @@ class Home extends Controller
         'NON ACTIF' => '0',
         'ACTIF' => '1'
     ];
+
+    const LENGTH_TOKEN = 78;
 
     const ROLES = [
         'BANNI' => '0',
@@ -20,6 +24,9 @@ class Home extends Controller
         'SUPERADMIN' => '99',
     ];
 
+    /**
+     * @throws Exception
+     */
     public function index()
     {
         $article = new Article();
@@ -30,14 +37,46 @@ class Home extends Controller
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function contact()
     {
+        $mailer = new Mailer();
+        $post = isset($_POST) ? $_POST : false;
 
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($post['sendForm'] == 'send') {
+                $mailer->setName($post['name']);
+                $mailer->setEmail($post['email']);
+                $mailer->setSubject($post['subject']);
+                $mailer->setContent($post['content']);
+                if ($mailer->checkFormValidate()) {
+                    $data = [
+                        'name' => $mailer->getName(),
+                        'email' => $mailer->getEmail(),
+                        'subject' => $mailer->getSubject(),
+                        'content' => $mailer->getContent()
+                    ];
+                    $this->sendEmail('contact', $mailer->getSubject(), self::FROMEMAIL, $data, $mailer->getEmail(), self::AUTHOREMAIL);
+
+                    $_SESSION['flash']['alert'] = "success";
+                    $_SESSION['flash']['message'] = "Votre message à bien était envoyé";
+                    header('Location: /home/contact');
+                    exit;
+                }
+            }
+        }
         $this->generateView([
-            'contact' => $contact,
+            //'contact' => $contact,
+            'post' => $post,
+            'errorsMsg' => $mailer->getErrorsMsg(),
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function registration()
     {
         $user = new User();
@@ -54,13 +93,23 @@ class Home extends Controller
                         $dateNow = new DateTime();
                         $user->setCreatedAt($dateNow->format('Y-m-d H:i:s'));
                         $user->setRole(self::ROLES ['VISITEUR']);
-                        $user->setStatus(self::STATUS ['ACTIF']);
-                        $user->setToken(null);
+                        $user->setStatus(self::STATUS ['NON ACTIF']);
+                        $user->setToken(bin2hex(random_bytes(self::LENGTH_TOKEN)));
+                        $data = [
+                            'username' => $user->getUsername(),
+                            'email' => $user->getEmail(),
+                            'token' => $user->getToken()
+                        ];
                         $user->save();
-                        header('Location: /home');
+                        $this->sendEmail('registration', 'Inscription sur le blog Jean ForteRoche', $user->getEmail(), $data);
+
+                        $_SESSION['flash']['alert'] = "success";
+                        $_SESSION['flash']['message'] = "Veuillez consulté votre messagerie afin de valider la création de votre compte";
+                        header('Location: /home/registration');
                         exit();
                     } else {
-                        echo 'identifiant déjà utilisé';
+                        $_SESSION['flash']['alert'] = "danger";
+                        $_SESSION['flash']['message'] = "Identifiant indisponible";
                         die();
                     }
                 }
@@ -72,6 +121,38 @@ class Home extends Controller
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function user()
+    {
+
+
+        $user = new User();
+        $get = isset($_GET) ? $_GET : false;
+
+        $user->setEmail($get['email']);
+        $user->setToken($get['token']);
+
+        $userEmail = $user->getEmail();
+        if ($user->emailAndTokenValidation()) {
+            $userBdd = $user->getEmailAndTokenUserInBdd($userEmail);
+            if ($userBdd) {
+                $user->hydrate($userBdd);
+                $user->setStatus(self::STATUS ['ACTIF']);
+                $user->setRole(self::ROLES ['MEMBER']);
+
+                $user->updateUser();
+            }
+        }
+        $this->generateView([
+            'userBdd' => $userBdd
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function login()
     {
         $user = new User();
@@ -92,7 +173,8 @@ class Home extends Controller
                             $_SESSION['auth']['status'] = $user->getStatus();
                             $_SESSION['auth']['created_at'] = $user->getCreatedAt();
                             $_SESSION['auth']['id'] = $user->getId();
-                            /*$_SESSION['auth']['token']= $user->getToken();*/
+                            $_SESSION['auth']['token'] = $user->getToken();
+
                             $_SESSION['flash']['alert'] = "success";
                             $_SESSION['flash']['message'] = "Bienvenue";
                             header('Location: /dashboard');
@@ -111,6 +193,44 @@ class Home extends Controller
         $this->generateView([
             'errorsMsg' => $user->getErrorsMsg(),
             'post' => $post
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function forgotYourPassword()
+    {
+        $user = new User();
+        $post = isset($_POST) ? $_POST : false;
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($post['forgotYourPasswordForm'] == 'sendPassword') {
+                $user->setEmail($post['email']);
+                if ($user->formForgotPasswordValidate()) {
+                    $userBdd = $user->getUserInBdd(self::STATUS['ACTIF']);
+                    if ($userBdd) {
+                        $user->hydrate($userBdd);
+                        $user->generateToken();
+                        $data = [
+                            'username' => $user->getUsername(),
+                            'email' => $user->getEmail(),
+                            'token' => $user->getToken()
+                        ];
+                        echo '<pre>';
+                        print_r($data);
+                        die();
+                        $user->save();
+                        $this->sendEmail('forgotYourPassword', 'Reinitialisation du mot de passe', $user->getEmail(), $data);
+
+                    }
+                }
+            }
+        }
+
+        $this->generateView([
+            'errorsMsg' => $user->getErrorsMsg(),
+            'post' => $post,
         ]);
     }
 }

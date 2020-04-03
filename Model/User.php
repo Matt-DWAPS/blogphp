@@ -3,9 +3,8 @@ require_once 'Framework/Model.php';
 
 class User extends Model
 {
-
-
     const MAX_LENGTH_USERNAME = 16;
+    const LENGTH_TOKEN = 78;
 
     private $id;
     private $username;
@@ -222,11 +221,66 @@ class User extends Model
         $user = $this->executeRequest($sql, array(
             'id' => $this->getId(),
         ));
-        if ($user->rowCount() == 1)
+        if ($user->rowCount() === 1)
             return $user->fetch();
         else {
             throw new Exception("Aucun utilisateur ne correspond à l'identifiant '$userId'");
         }
+    }
+
+    private function checkToken()
+    {
+        if (Validator::isEmpty($this->getToken())) {
+            $this->errors++;
+            $this->errorsMsg['token'] = "Token non valide";
+        }
+    }
+
+    public function emailAndTokenValidation()
+    {
+        $this->checkEmail();
+        $this->checkToken();
+        if ($this->errors !== 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public function getEmailAndTokenUserInBdd($userEmail)
+    {
+        $sql = 'SELECT email, token FROM user WHERE email= :email';
+        $user = $this->executeRequest($sql, array(
+            'email' => $this->getEmail(),
+        ));
+        if ($user->rowCount() === 1)
+            return $user->fetch();
+        else {
+            throw new Exception("Aucun utilisateur ne correspond à l'adresse email '$userEmail'");
+        }
+    }
+
+    public function updateUser()
+    {
+        $sql = 'UPDATE user SET role=:role, status=:status WHERE email=:email';
+        $updateUser = $this->executeRequest($sql, array(
+            'email' => $this->getEmail(),
+            'role' => $this->getRole(),
+            'status' => $this->getStatus()
+        ));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function generateToken()
+    {
+        $this->setToken(bin2hex(random_bytes(self::LENGTH_TOKEN)));
     }
 
     public function getUserInBdd($status = null)
@@ -260,6 +314,16 @@ class User extends Model
         $this->checkUsername();
         $this->checkEmail();
         $this->checkPassword();
+        if ($this->errors !== 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function formForgotPasswordValidate()
+    {
+        $this->checkEmail();
         if ($this->errors !== 0) {
             return false;
         } else {
