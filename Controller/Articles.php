@@ -8,7 +8,9 @@ require_once 'Services/Validator.php';
 
 class Articles extends Controller
 {
-
+    /**
+     * @throws Exception
+     */
     public function index()
     {
         $article = new Article();
@@ -73,6 +75,7 @@ class Articles extends Controller
     public function reportComment()
     {
         $commentId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $article = new Article();
         $comment = new Comment();
         $commentBdd = $comment->getComment($commentId);
         if ($commentBdd) {
@@ -81,7 +84,14 @@ class Articles extends Controller
         $comment->setStatus(self::COMMENT_STATUS['EN ATTENTE']);
         $comment->updateComment($commentId, $comment->getStatus());
         $comment->setArticleId($comment->getArticleId());
+        $articleBdd = $article->getOneArticle($comment->getArticleId());
+        $article->getTitle();
+        $data = [
+            'title' => $articleBdd->title,
+            'content' => $comment->getContent()
+        ];
 
+        $this->sendEmail('reportComment', 'Commentaire signaler', self::FROMEMAIL, $data);
         $_SESSION['flash']['alert'] = "Success";
         $_SESSION['flash']['message'] = "Nous vous remercions pour le signalement de ce commentaire, il sera examiné prochainement";
         header('Location: /articles/read/' . $comment->getArticleId());
