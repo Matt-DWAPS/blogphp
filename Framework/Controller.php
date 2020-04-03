@@ -2,9 +2,13 @@
 require_once 'Configuration.php';
 require_once 'Request.php';
 require_once 'View.php';
+require_once './vendor/autoload.php';
 
 abstract class Controller
 {
+    const FROMEMAIL = 'jeanforteroche@webagency-matt.com';
+    const AUTHOREMAIL = 'Jean ForteRoche';
+
     const ROLES = [
         'BANNI' => '0',
         'VISITEUR' => '10',
@@ -40,6 +44,10 @@ abstract class Controller
         $this->request = $request;
     }
 
+    /**
+     * @param $action
+     * @throws Exception
+     */
     // Exécute l'action à réaliser
     public function executeAction($action)
     {
@@ -56,6 +64,11 @@ abstract class Controller
     // Oblige les classes dérivées à implémenter cette action par défaut
     public abstract function index();
 
+
+    /**
+     * @param array $dataView
+     * @throws Exception
+     */
     // Génère la vue associée au contrôleur courant
     protected function generateView($dataView = array())
     {
@@ -65,5 +78,29 @@ abstract class Controller
         // Instanciation et génération de la vue
         $vue = new View($this->action, $controller);
         $vue->generate($dataView);
+    }
+
+
+    public function sendEmail($action, $subject, $toEmail = self::FROMEMAIL, $data = [], $fromEmail = self::FROMEMAIL, $mailAuthor = self::AUTHOREMAIL)
+    {
+        $vue = new View($action, 'Mails');
+        $body = $vue->generateMail($data);
+
+        
+        $transport = (new Swift_SmtpTransport(
+            Configuration::get('mailtransport', 'mailport')))
+            ->setUsername(Configuration::get('mailusername'))
+            ->setPassword(Configuration::get('mailpassword'));
+
+        $mailer = new Swift_Mailer($transport);
+
+
+        $message = (new Swift_Message($subject))
+            ->setFrom([$fromEmail => $mailAuthor])
+            ->setTo([$toEmail])
+            ->setBody($body)
+            ->setContentType('text/html');
+        $mailer->send($message);
+
     }
 }

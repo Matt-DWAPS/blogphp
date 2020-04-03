@@ -12,24 +12,37 @@
         <form method="post">
             <div class="form-group">
                 <input class="form-control" type="text" id="name" name="name"
-                       placeholder="Nom : *" value=""/>
-                <p style="color: red"><?= isset($errorsMsg['name']) ? $errorsMsg['name'] : ''; ?></p>
+                       placeholder="Nom : *" value="<?= isset($post['name']) ? $post['name'] : ''; ?>"/>
+                <p class="text-danger"><?= isset($errorsMsg['name']) ? $errorsMsg['name'] : ''; ?></p>
+            </div>
+            <div class="form-group">
                 <input class="form-control " type="text" id="email" name="email"
                        placeholder="Entrer votre adresse e-mail : *"
                        value="<?= isset($post['email']) ? $post['email'] : ''; ?>"/>
                 <p class="text-danger"><?= isset($errorsMsg['email']) ? $errorsMsg['email'] : ''; ?></p>
-                <br/>
-                <input class="form-control" type="text" id="subject" name="subject"
-                       placeholder="Sujet : *" value=""/>
-                <p style="color: red"><?= isset($errorsMsg['subject']) ? $errorsMsg['subject'] : ''; ?></p>
-                <textarea class="form-control input-lg" rows="4" id="content" placeholder="Message : *"
-                          aria-label="content"><?= isset($post['content']) ? $post['content'] : ''; ?></textarea>
-                <br/>
-                <input type="hidden" name="sendForm" value="send">
-                <input class="btn btn-primary" type="submit" id="submit" value="Envoyer">
             </div>
-        </form>
+            <div class="form-group">
+                <input class="form-control" type="text" id="subject" name="subject"
+                       placeholder="Sujet : *" value="<?= isset($post['subject']) ? $post['subject'] : ''; ?>"/>
+                <p class="text-danger"><?= isset($errorsMsg['subject']) ? $errorsMsg['subject'] : ''; ?></p>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control input-lg" rows="4" id="content" name="content" placeholder="Message : *"
+                          aria-label="content"><?= isset($post['content']) ? $post['content'] : ''; ?></textarea>
+                <p class="text-danger"><?= isset($errorsMsg['content']) ? $errorsMsg['content'] : ''; ?></p>
+            </div>
+            <br/>
+            <input type="hidden" name="sendForm" value="send">
+            <input class="btn btn-primary" type="submit" id="submit" value="Envoyer">
+            <p class="text-danger"><?php echo $errorMsg ?></p>
+            <?php if (isset($_SESSION['flash'])) : ?>
+                <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
+                    <?= $_SESSION['flash']['message']; ?></p>
+            <?php endif; ?>
+            <?php unset($_SESSION['flash']); ?>
     </div>
+    </form>
+</div>
 
 </div>
 
