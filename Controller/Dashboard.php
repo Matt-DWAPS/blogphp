@@ -33,7 +33,7 @@ class Dashboard extends Controller
     /**
      * @throws Exception
      */
-    public function updateUser()
+    public function adminUpdateUser()
     {
 
         $roles = self::ROLES;
@@ -43,8 +43,17 @@ class Dashboard extends Controller
         $post = isset($_POST) ? $_POST : false;
 
         $users = $user->getUser($userId);
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($post['userForm'] == 'updateUser') {
+                $user->setEmail($post['email']);
+                $user->setRole($post['role']);
+                $user->setStatus($post['status']);
+                $user->setPicture($post['picture']);
+                $user->updateUser();
+                header('Location: /dashboard');
+                exit;
+            }
         }
         $this->generateView([
             'users' => $users,

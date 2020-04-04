@@ -15,6 +15,7 @@ class User extends Model
     private $role;
     private $status;
     private $token;
+    private $picture;
 
     private $errors = 0;
     private $errorsMsg = [];
@@ -164,6 +165,23 @@ class User extends Model
     }
 
     /**
+     * @return mixed
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
+     * @param mixed $picture
+     */
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
+    }
+
+
+    /**
      * @return array
      */
     public function getErrorsMsg()
@@ -217,11 +235,11 @@ class User extends Model
      */
     public function getUser($userId)
     {
-        $sql = 'SELECT id as id, created_at as created_at, password as password, role as role, status as status, username as username, picture as picture, email as email FROM user WHERE id=:id';
+        $sql = 'SELECT id as id, created_at as created_at, role as role, status as status, username as username, picture as picture, email as email FROM user WHERE id=:id';
         $user = $this->executeRequest($sql, array(
-            'id' => $this->getId(),
+            'id' => $userId,
         ));
-        if ($user->rowCount() === 1)
+        if ($user->rowCount() == 1)
             return $user->fetch();
         else {
             throw new Exception("Aucun utilisateur ne correspond à l'identifiant '$userId'");

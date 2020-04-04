@@ -41,18 +41,12 @@
 
                     foreach ($user_status as $status => $level) : ?>
                         <option value="<?= $level; ?>"
-                                <?= ($level === $users->status) ? 'selected' : '' ?>
+                            <?= ($level === $users->status) ? 'selected' : '' ?>
                         ><?= $status; ?></option>
                     <? endforeach; ?>
                 </select>
             </div>
-            <div class="col-4">
-                <label for="password">Nouveau mot de passe :</label>
-                <input class="form-control" type="password" id="password" name="password"/>
-                <p class="text-danger"><?= isset($errorsMsg['password']) ? $errorsMsg['password'] : ''; ?></p>
-            </div>
-        </div>
-        <div class="row p-2 pb-5 d-flex justify-content-around">
+
             <div class="col-4">
                 <label for="role">Rôle :</label>
                 <select class="form-control" name="role" id="role">
@@ -60,21 +54,16 @@
 
                     foreach ($roles as $role => $level) : ?>
                         <option value="<?= $level; ?>"
-                                <?= ($level === $users->role) ? 'selected' : '' ?>
+                            <?= ($level === $users->role) ? 'selected' : '' ?>
                         ><?= $role; ?></option>
                     <? endforeach; ?>
                 </select>
-            </div>
-            <div class="col-4">
-                <label for="cPassword">Retapez votre mot de passe :</label>
-                <input class="form-control" type="password" id="cPassword" name="cPassword"
-                />
             </div>
         </div>
 
     </div>
     <div class="row mt-3">
-        <div class="col">
+        <div class="col text-center">
             <a class=" btn btn-danger" role="button" href="dashboard/"><i class="fas fa-arrow-left"></i> Retour</a>
         </div>
         <div class="col text-center">

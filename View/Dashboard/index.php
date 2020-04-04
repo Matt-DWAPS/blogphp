@@ -53,7 +53,7 @@
                     } ?></td>
                 <td>
                     <a class=" btn btn-primary" role="button"
-                       href="<?= "dashboard/updateUser/" . $user->id ?>">Modifier</a>
+                       href="<?= "dashboard/adminUpdateUser/" . $user->id ?>">Modifier</a>
                 </td>
             </tr>
         <?php endforeach; ?>
