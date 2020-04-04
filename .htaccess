@@ -4,5 +4,3 @@ RewriteBase /
 RewriteEngine on
 # blog.com/home/article/1  --> blog.com/index.php?controller='home'&action='article'&id=1
 RewriteRule ^([a-zA-Z]*)?/?([a-zA-Z]*)?/?([0-9]*)?/?$ index.php?controller=$1&action=$2&id=$3 [NC,L]
-# blog.com/home/user/email&token  --> blog.com/index.php?controller='home'&action='user'&email=3&token=4
-RewriteRule ^([a-zA-Z]*)?/?([a-zA-Z]*)?/?(.*)/([^/]*)/?$ index.php?controller=$1&action=$2&email=$3&token=$4 [L]

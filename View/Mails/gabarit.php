@@ -30,7 +30,8 @@
 
                                 <td class="w580" width="580" valign="middle" align="left">
                                     <div class="heading">
-                                        <img width="100%" src="content/img/header.jpg">
+                                        <?php $image = 'http://www.' . $_SERVER['SERVER_NAME'] . DIRECTORY_SEPARATOR . 'content/img/header.jpg'; ?>
+                                        <img width="100%" src="<?= $image; ?>">
                                     </div>
                                 </td>
                             </tr>

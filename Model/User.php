@@ -275,6 +275,26 @@ class User extends Model
         ));
     }
 
+    public function updateToken()
+    {
+        $sql = 'UPDATE user SET token=:token WHERE email=:email';
+        $updateUser = $this->executeRequest($sql, array(
+            'email' => $this->getEmail(),
+            'token' => $this->getToken()
+        ));
+    }
+
+    public function updatePassword()
+    {
+        $this->passwordHash();
+        $sql = 'UPDATE user SET password=:password, token=:token WHERE email=:email';
+        $updateUser = $this->executeRequest($sql, array(
+            'email' => $this->getEmail(),
+            'password' => $this->getPassword(),
+            'token' => $this->getToken()
+        ));
+    }
+
     /**
      * @throws Exception
      */
@@ -306,6 +326,16 @@ class User extends Model
         if (Validator::isEmpty($this->getPassword())) {
             $this->errors++;
             $this->errorsMsg['password'] = "Password vide";
+        }
+    }
+
+    public function formNewPasswordValidate()
+    {
+        $this->checkPassword();
+        if ($this->errors !== 0) {
+            return false;
+        } else {
+            return true;
         }
     }
 

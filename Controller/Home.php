@@ -94,7 +94,7 @@ class Home extends Controller
                         $user->setCreatedAt($dateNow->format('Y-m-d H:i:s'));
                         $user->setRole(self::ROLES ['VISITEUR']);
                         $user->setStatus(self::STATUS ['NON ACTIF']);
-                        $user->setToken(bin2hex(random_bytes(self::LENGTH_TOKEN)));
+                        $user->generateToken();
                         $data = [
                             'username' => $user->getUsername(),
                             'email' => $user->getEmail(),
@@ -124,10 +124,8 @@ class Home extends Controller
     /**
      * @throws Exception
      */
-    public function user()
+    public function userValidationRegistered()
     {
-
-
         $user = new User();
         $get = isset($_GET) ? $_GET : false;
 
@@ -141,14 +139,61 @@ class Home extends Controller
                 $user->hydrate($userBdd);
                 $user->setStatus(self::STATUS ['ACTIF']);
                 $user->setRole(self::ROLES ['MEMBER']);
-
                 $user->updateUser();
+                $_SESSION['flash']['alert'] = "success";
+                $_SESSION['flash']['message'] = "Votre compte est désormais activé, vous pouvez dès à présent vous connecter à l'aide de vos identifiants";
+                header('Location: /home/registration');
+                exit();
             }
         }
         $this->generateView([
             'userBdd' => $userBdd
         ]);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function forgottenPassword()
+    {
+        $user = new User();
+        $get = isset($_GET) ? $_GET : false;
+        $post = isset($_POST) ? $_POST : false;
+
+        $user->setEmail($get['email']);
+        $user->setToken($get['token']);
+
+        $userEmail = $user->getEmail();
+        $userBdd = $user->getEmailAndTokenUserInBdd($userEmail);
+        if ($userBdd) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($post['passwordForm'] == 'newPassword') {
+                    $user->setpassword($post['password']);
+                    $user->setCPassword($post['cPassword']);
+                    if ($user->formNewPasswordValidate()) {
+                        $user->generateToken();
+                        $data = [
+                            'username' => $user->getUsername(),
+                            'email' => $user->getEmail(),
+                            'token' => $user->getToken()
+                        ];
+                        $user->updatePassword();
+                        $this->sendEmail('newPassword', 'Modification de votre compte sur le blog Jean ForteRoche', $user->getEmail(), $data);
+
+                        $_SESSION['flash']['alert'] = "success";
+                        $_SESSION['flash']['message'] = "Vous pouvez dès à présent vous connecter avec votre nouveau mot de passe";
+                        header('Location: /home/login');
+                        exit();
+                    }
+                }
+            }
+        }
+        $this->generateView([
+            'errorsMsg' => $user->getErrorsMsg(),
+            'post' => $post
+        ]);
+    }
+
 
     /**
      * @throws Exception
@@ -217,17 +262,16 @@ class Home extends Controller
                             'email' => $user->getEmail(),
                             'token' => $user->getToken()
                         ];
-                        echo '<pre>';
-                        print_r($data);
-                        die();
-                        $user->save();
+                        $user->updateToken();
                         $this->sendEmail('forgotYourPassword', 'Reinitialisation du mot de passe', $user->getEmail(), $data);
-
+                        $_SESSION['flash']['alert'] = "success";
+                        $_SESSION['flash']['message'] = "Veuillez consulté votre messagerie afin de reinitialiser de votre mot de passe";
+                        header('Location: /home/login');
+                        exit();
                     }
                 }
             }
         }
-
         $this->generateView([
             'errorsMsg' => $user->getErrorsMsg(),
             'post' => $post,
