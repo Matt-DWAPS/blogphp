@@ -201,7 +201,6 @@ class User extends Model
         }
     }
 
-
     public function hydrate($user)
     {
         $this->setCPassword($user->password);
@@ -267,6 +266,7 @@ class User extends Model
     }
 
     /**
+     * @param $userEmail
      * @return mixed
      * @throws Exception
      */
@@ -290,6 +290,23 @@ class User extends Model
             'email' => $this->getEmail(),
             'role' => $this->getRole(),
             'status' => $this->getStatus()
+        ));
+    }
+
+    public function updatePictureUser()
+    {
+        $sql = 'UPDATE user SET picture=:picture WHERE id=:id';
+        $updatePicture = $this->executeRequest($sql, array(
+            'id' => $this->getId(),
+            'picture' => $this->getPicture()
+        ));
+    }
+
+    public function savePicture()
+    {
+        $sql = "INSERT INTO user(picture) VALUES(:picture)";
+        $req = $this->executeRequest($sql, array(
+            'picture' => $this->getPicture(),
         ));
     }
 

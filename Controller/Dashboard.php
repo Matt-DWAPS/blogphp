@@ -35,7 +35,6 @@ class Dashboard extends Controller
      */
     public function adminUpdateUser()
     {
-
         $roles = self::ROLES;
         $user_status = self::STATUS;
         $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -49,16 +48,52 @@ class Dashboard extends Controller
                 $user->setEmail($post['email']);
                 $user->setRole($post['role']);
                 $user->setStatus($post['status']);
-                $user->setPicture($post['picture']);
                 $user->updateUser();
-                header('Location: /dashboard');
-                exit;
+                $_SESSION['flash']['alert'] = "Success";
+                $_SESSION['flash']['infos'] = "Modification effectué avec succès !";
             }
         }
         $this->generateView([
             'users' => $users,
             'roles' => $roles,
             'user_status' => $user_status,
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function pictureUpload()
+    {
+        $user = new User();
+        $post = isset($_POST) ? $_POST : false;
+
+        $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $users = $user->getUser($userId);
+        $dossier = 'content/uploads/';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($post['pictureUpload'] == 'upload') {
+
+                $fichier = basename($_FILES['picture']['name']);
+                if (move_uploaded_file($_FILES['picture']['tmp_name'], $dossier . $fichier)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
+                {
+                    $usersBdd = $user->hydrate($users);
+                    $user->setPicture($dossier . $fichier);
+
+                    $user->updatePictureUser();
+                    $_SESSION['flash']['alert'] = "Success";
+                    $_SESSION['flash']['infos'] = "Upload effectué avec succès !";
+                    header('Location: /dashboard/adminUpdateUser/' . $users->id);
+                    exit;
+                } else //Sinon (la fonction renvoie FALSE).
+                {
+                    echo 'Echec de l\'upload !';
+                }
+            }
+        }
+        $this->generateView([
+
         ]);
     }
 
