@@ -200,7 +200,7 @@ class Article extends Model
      */
     public function getOneArticle($articleId)
     {
-        $sql = 'SELECT id as id, created_at as created_at, content as content, title as title, excerpt as excerpt, user_id as user_id from article WHERE id=:id';
+        $sql = 'SELECT id as id, created_at as created_at, content as content, title as title, excerpt as excerpt, user_id as user_id, picture_url as picture_url from article WHERE id=:id';
         $article = $this->executeRequest($sql, array(
             'id' => $articleId,
         ));
@@ -209,6 +209,25 @@ class Article extends Model
 
         else
             throw new Exception("Aucun article ne correspond à l'identifiant '$articleId'");
+    }
+
+    public function updatePicturArticle()
+    {
+        $sql = 'UPDATE article SET picture_url=:picture WHERE id=:id';
+        $updatePicture = $this->executeRequest($sql, array(
+            'id' => $this->getId(),
+            'picture' => $this->getPictureUrl()
+        ));
+    }
+
+    public function savePictureArticle()
+    {
+        $sql = "INSERT INTO article(picture_url) VALUES(:picture)";
+        $req = $this->executeRequest($sql, array(
+            'picture' => $this->getPictureUrl(),
+
+        ));
+
     }
 
     public function updateArticle()

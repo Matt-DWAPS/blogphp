@@ -74,13 +74,11 @@ class Dashboard extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['pictureUpload'] == 'upload') {
-
                 $fichier = basename($_FILES['picture']['name']);
                 if (move_uploaded_file($_FILES['picture']['tmp_name'], $dossier . $fichier)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
                 {
                     $usersBdd = $user->hydrate($users);
                     $user->setPicture($dossier . $fichier);
-
                     $user->updatePictureUser();
                     $_SESSION['flash']['alert'] = "Success";
                     $_SESSION['flash']['infos'] = "Upload effectué avec succès !";
@@ -119,7 +117,7 @@ class Dashboard extends Controller
                         }
                         $article->setUserId($_SESSION['auth']['id']);
                         $article->save();
-                        header('Location: /dashboard');
+                        header('Location: /dashboard/');
                         exit;
                     } else {
                         $_SESSION['flash']['alert'] = "danger";
@@ -134,6 +132,41 @@ class Dashboard extends Controller
         $this->generateView([
             'errorsMsg' => $article->getErrorsMsg(),
             'post' => $post
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function pictureArticleUpload()
+    {
+        $article = new Article();
+        $post = isset($_POST) ? $_POST : false;
+
+        $articleId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $articles = $article->getOneArticle($articleId);
+        $dossier = 'content/uploads/article/';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($post['pictureUpload'] == 'upload') {
+                $fichier = basename($_FILES['picture']['name']);
+                if (move_uploaded_file($_FILES['picture']['tmp_name'], $dossier . $fichier)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
+                {
+                    $articleBdd = $article->hydrate($articles);
+                    $article->setPictureUrl($dossier . $fichier);
+                    $article->updatePicturArticle();
+                    $_SESSION['flash']['alert'] = "Success";
+                    $_SESSION['flash']['infos'] = "Upload effectué avec succès !";
+                    header('Location: /dashboard/');
+                    exit;
+                } else //Sinon (la fonction renvoie FALSE).
+                {
+                    echo 'Echec de l\'upload !';
+                }
+            }
+        }
+        $this->generateView([
+
         ]);
     }
 
@@ -156,11 +189,11 @@ class Dashboard extends Controller
         $article = new Article();
         $articleBdd = $article->getOneArticle($articleId);
         $article->hydrate($articleBdd);
+        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['articleForm'] == 'updateArticle') {
                 $article->setTitle($post['title']);
                 $article->setContent($post['content']);
-                $article->setPictureUrl($post['picture_url']);
                 $article->setExcerpt($post['excerpt']);
                 if ($article->formArticleUpdateValidate()) {
                     $dateNow = new DateTime();

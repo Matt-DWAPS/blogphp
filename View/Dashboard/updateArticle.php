@@ -22,25 +22,41 @@
                   name="excerpt"><?= $articles->getExcerpt(); ?></textarea>
         <p class="text-danger"><?= isset($errorsMsg['excerpt']) ? $errorsMsg['excerpt'] : ''; ?></p>
     </div>
-    <div class="form-group border rounded p-2 col-5 ">
-        <label for="picture_url">Ajouter une image</label><br/>
-        <input type="file" size="30" class="btn btn-primary" id="picture_url" name="picture_url"
-               accept="image/png, image/jpeg, image/jpg"
-               value=" <?= $articles->getPictureUrl(); ?>"/>
 
+    <?php if (empty($articles->getPictureUrl())) : ?>
+        <div class="form-group border rounded p-2 col-2 ">
+            <label for="picture_url">Image</label><br/>
+            <a class="btn btn-primary d-flex align-items-center" role="button"
+               href="<?= "dashboard/pictureArticleUpload/" . $articles->getId() ?>">
+                Ajouter
+                une image</a>
+        </div>
+    <?php else : ?>
+        <div class="col-12 d-flex justify-content-center">
+            <div class="border rounded col-6">
+                <div class="form-group  p-2  justify-content-center d-flex">
+                    <img class="img-fluid" src="<?= $articles->getPictureUrl() ?>">
 
-        <p class="text-danger"><?= isset($errorsMsg['picture_url']) ? $errorsMsg['picture_url'] : ''; ?></p>
-    </div>
+                </div>
+                <div class="row justify-content-center mb-3">
+                    <a class="btn btn-primary d-flex align-items-center" role="button"
+                       href="<?= "dashboard/pictureArticleUpload/" . $articles->getId() ?>">
+                        Modifier
+                        l'image</a>
+                </div>
+            </div>
 
-    <div class=" mt-3 d-flex justify-content-around">
-        <div class="col-3">
+        </div>
+    <?php endif; ?>
+    <div class="row mt-3 d-flex justify-content-around">
+        <div class="">
             <a class=" btn btn-danger" role="button" href="dashboard/"><i class="fas fa-arrow-left"></i> Retour</a>
         </div>
-        <div class="col-4">
+        <div class="">
             <input type="hidden" name="articleForm" value="updateArticle"/>
             <input class="btn btn-primary" type="submit" value="Enregistrer en tant que brouillon"/>
         </div>
-        <div class="col-3 d-flex justify-content-end">
+        <div class=" ">
             <input class="btn btn-primary" type="submit" name="publish" value="Mettre en ligne">
         </div>
 

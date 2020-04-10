@@ -21,13 +21,6 @@
                   name="excerpt"><?= isset($post['excerpt']) ? $post['excerpt'] : ''; ?></textarea>
         <p class="text-danger"><?= isset($errorsMsg['excerpt']) ? $errorsMsg['excerpt'] : ''; ?></p>
     </div>
-    <div class="form-group border rounded p-2 col-4">
-        <label for="picture_url">Ajouter une image</label><br/>
-        <input type="file" class="btn btn-primary" id="picture_url" name="picture_url"
-               accept="image/png, image/jpeg, image/jpg"
-               value="<?= isset($post['picture_url']) ? $post['picture_url'] : ''; ?>">
-        <p class="text-danger"><?= isset($errorsMsg['picture_url']) ? $errorsMsg['picture_url'] : ''; ?></p>
-    </div>
     <div class=" mt-3 d-flex justify-content-around">
         <div class="col-3">
             <a class=" btn btn-danger" role="button" href="dashboard/"><i class="fas fa-arrow-left"></i> Retour</a>

@@ -301,15 +301,7 @@ class User extends Model
             'picture' => $this->getPicture()
         ));
     }
-
-    public function savePicture()
-    {
-        $sql = "INSERT INTO user(picture) VALUES(:picture)";
-        $req = $this->executeRequest($sql, array(
-            'picture' => $this->getPicture(),
-        ));
-    }
-
+    
     public function updateToken()
     {
         $sql = 'UPDATE user SET token=:token WHERE email=:email';

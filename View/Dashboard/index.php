@@ -81,7 +81,14 @@
             <th scope="row" class="text-center"><?= $article->created_at ?></th>
             <td><?= $article->title ?></td>
             <td><?= $article->excerpt ?></td>
-            <td><?= $article->picture_url ?></td>
+            <?php if (empty($article->picture_url)) : ?>
+                <td>
+                    <a href="<?= "dashboard/pictureArticleUpload/" . $article->id ?>"
+                       class="btn btn-primary text-center">Ajouter image</a>
+                </td>
+            <?php else: ?>
+                <td><img class="img-fluid" src="<?= $article->picture_url ?>"></td>
+            <?php endif; ?>
             <td>
                 <?php if ($article->publish == 1) {
                     echo "publié";
