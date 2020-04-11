@@ -49,14 +49,14 @@
         </div>
     <?php endif; ?>
     <div class="row mt-3 d-flex justify-content-around">
-        <div class="">
+        <div>
             <a class=" btn btn-danger" role="button" href="dashboard/"><i class="fas fa-arrow-left"></i> Retour</a>
         </div>
-        <div class="">
+        <div>
             <input type="hidden" name="articleForm" value="updateArticle"/>
             <input class="btn btn-primary" type="submit" value="Enregistrer en tant que brouillon"/>
         </div>
-        <div class=" ">
+        <div>
             <input class="btn btn-primary" type="submit" name="publish" value="Mettre en ligne">
         </div>
 

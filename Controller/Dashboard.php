@@ -189,7 +189,7 @@ class Dashboard extends Controller
         $article = new Article();
         $articleBdd = $article->getOneArticle($articleId);
         $article->hydrate($articleBdd);
-        
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['articleForm'] == 'updateArticle') {
                 $article->setTitle($post['title']);
