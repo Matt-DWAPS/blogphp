@@ -13,8 +13,30 @@
     <?php if (isset($_SESSION['auth'])) : ?>
         <div>
             <form method="post" class="border p-2">
-                <label for="username">Nom d'utilisateur : <?php echo($_SESSION['auth']['username']); ?>
-                </label>
+
+                <?php foreach ($comments as $comment) : ?>
+                    <?php if (empty($comment->picture)) : ?>
+                        <div class="col d-flex">
+                            <div class="col-1 mt-2 mb-2">
+                                <i class="fas fa-user fa-3x img-thumbnail"></i>
+                            </div>
+                            <div class="col-11 d-flex align-items-center">
+                                <label for="username"> <?php echo($_SESSION['auth']['username']); ?>
+                                </label>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="col d-flex">
+                            <div class="col-1 mt-2 mb-2">
+                                <img class="img-fluid img-thumbnail rounded-circle" src="<?= $comment->picture ?>">
+                            </div>
+                            <div class="col-11 d-flex align-items-center">
+                                <label for="username"> <?php echo($_SESSION['auth']['username']); ?>
+                                </label>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
                 <div class="form-group">
                     <label for="content">Contenu du commentaire :</label>
                     <textarea class="form-control input-lg" rows="4" id="content" name="content"
@@ -46,8 +68,31 @@
             <div class="border rounded p-2 mb-2">
                 <?php $date = new DateTime($comment->date); ?>
                 <p class="m-0 pb-3">Posté le : <?= $date->format('d-m-Y'); ?> à <?= $date->format('h:i:s'); ?></p>
-                <p class="border p-2"><u><?= $comment->username ?></u> Dit
-                    : <?= $comment->content ?></p>
+                <div class="border">
+                    <?php if (empty($comment->picture)) : ?>
+                        <div class="col d-flex">
+                            <div class="col-1 mt-2 mb-2">
+                                <i class="fas fa-user fa-3x img-thumbnail"></i>
+                            </div>
+                            <div class="col-11 d-flex align-items-center">
+                                <span><u><?= $comment->username ?></u> Dit
+                                : <?= $comment->content ?></span>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="col d-flex">
+                            <div class="col-1 mt-2 mb-2">
+                                <img class="img-fluid img-thumbnail rounded-circle" src="<?= $comment->picture ?>">
+                            </div>
+                            <div class="col-11 d-flex align-items-center">
+                                <p class=""><u><?= $comment->username ?></u> Dit
+                                    : <?= $comment->content ?></p>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
+
 
                 <div class="input d-flex justify-content-end">
                     <a class=" btn-link text-danger" role="button"

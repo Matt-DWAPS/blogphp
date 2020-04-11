@@ -31,6 +31,7 @@ class Articles extends Controller
         $article = new Article();
         $comment = new Comment();
         $comments = $comment->getComments($articleId, self::COMMENT_STATUS['PUBLIÉ']);
+        
         $articles = $article->getOneArticle($articleId);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['commentForm'] == 'addComment') {
