@@ -8,117 +8,76 @@
     <div class="border rounded p-3 pb-5 col-12">
         <div class="row p-2 m-2">
             <?php if (empty($users->picture)) : ?>
-                <div class="border rounded p-2 row">
-                    <a class="btn btn-primary d-flex align-items-center" role="button"
-                       href="<?= "dashboard/pictureUpload/" . $users->id ?>">
-                        Ajouter
-                        une photo de profil</a>
-                </div>
-                <div class="col">
-                    <div class="row p-3">
-                        <div class="col text-right">
-                            <p>Date d'inscription : <?= $users->created_at ?></p>
-                        </div>
+                <div class="border rounded p-2 col-3">
+                    <div class="d-flex justify-content-center border p-2">
+                        <i class="fas fa-user fa-10x"></i>
                     </div>
-                    <div class="row p-3">
-                        <div class="col">
-                            <label for="username">Nom d'utilisateur :</label>
-                            <input class="form-control" type="text" id="username" name="username"
-                                   value="<?= $users->username ?>">
-                        </div>
-                        <div class="col">
-                            <label for="email">Adresse email :</label>
-                            <input class="form-control" type="email" id="email" name="email"
-                                   value="<?= $users->email, isset($post['email']) ? $post['email
-                       '] : ''; ?>">
-                            <p class="text-danger"><?= isset($errorsMsg['email']) ? $errorsMsg['email'] : ''; ?></p>
-                        </div>
-                    </div>
-                    <div class="row p-3">
-                        <div class="col">
-                            <label for="status">Statut :</label>
-                            <select class="form-control" name="status" id="status">
-                                <?php
-
-                                foreach ($user_status as $status => $level) : ?>
-                                    <option value="<?= $level; ?>"
-                                        <?= ($level === $users->status) ? 'selected' : '' ?>
-                                    ><?= $status; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col">
-                            <label for="role">Rôle :</label>
-                            <select class="form-control" name="role" id="role">
-                                <?php
-
-                                foreach ($roles as $role => $level) : ?>
-                                    <option value="<?= $level; ?>"
-                                        <?= ($level === $users->role) ? 'selected' : '' ?>
-                                    ><?= $role; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>
+                    <div class="border col mt-3 p-2">
+                        <a class="btn btn-primary" role="button"
+                           href="<?= "dashboard/pictureUpload/" . $users->id ?>">
+                            Ajouter
+                            une photo de profil</a>
                     </div>
                 </div>
             <?php else: ?>
-                <div class="border rounded p-3 col-3 justify-content-center">
-                    <img class="img-fluid" src="<?= $users->picture ?>">
-                    <div class="d-flex mt-2 justify-content-center">
+                <div class="border rounded p-2 col-3">
+                    <div class="d-flex justify-content-center border p-2">
+                        <img class="img-fluid" src="<?= $users->picture ?>">
+                    </div>
+                    <div class="border col mt-3 p-2">
                         <a class="btn btn-primary" role="button"
                            href="<?= "dashboard/pictureUpload/" . $users->id ?>">
                             Modifier la photo de profil</a>
                     </div>
-
-                </div>
-                <div class="col">
-                    <div class="row p-3">
-                        <div class="col text-right">
-                            <p>Date d'inscription : <?= $users->created_at ?></p>
-                        </div>
-                    </div>
-                    <div class="row p-3">
-                        <div class="col">
-                            <label for="username">Nom d'utilisateur :</label>
-                            <input class="form-control" type="text" id="username" name="username"
-                                   value="<?= $users->username ?>">
-                        </div>
-                        <div class="col">
-                            <label for="email">Adresse email :</label>
-                            <input class="form-control" type="email" id="email" name="email"
-                                   value="<?= $users->email, isset($post['email']) ? $post['email
-                       '] : ''; ?>">
-                            <p class="text-danger"><?= isset($errorsMsg['email']) ? $errorsMsg['email'] : ''; ?></p>
-                        </div>
-                    </div>
-                    <div class="row p-3">
-                        <div class="col">
-                            <label for="status">Statut :</label>
-                            <select class="form-control" name="status" id="status">
-                                <?php
-
-                                foreach ($user_status as $status => $level) : ?>
-                                    <option value="<?= $level; ?>"
-                                        <?= ($level === $users->status) ? 'selected' : '' ?>
-                                    ><?= $status; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col">
-                            <label for="role">Rôle :</label>
-                            <select class="form-control" name="role" id="role">
-                                <?php
-
-                                foreach ($roles as $role => $level) : ?>
-                                    <option value="<?= $level; ?>"
-                                        <?= ($level === $users->role) ? 'selected' : '' ?>
-                                    ><?= $role; ?></option>
-                                <? endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
                 </div>
             <?php endif; ?>
+            <div class="col">
+                <div class="row p-3">
+                    <div class="col text-right">
+                        <p>Date d'inscription : <?= $users->created_at ?></p>
+                    </div>
+                </div>
+                <div class="row p-3">
+                    <div class="col">
+                        <label for="username">Nom d'utilisateur :</label>
+                        <input class="form-control" type="text" id="username" name="username"
+                               value="<?= $users->username ?>">
+                    </div>
+                    <div class="col">
+                        <label for="email">Adresse email :</label>
+                        <input class="form-control" type="email" id="email" name="email"
+                               value="<?= $users->email, isset($post['email']) ? $post['email
+                       '] : ''; ?>">
+                        <p class="text-danger"><?= isset($errorsMsg['email']) ? $errorsMsg['email'] : ''; ?></p>
+                    </div>
+                </div>
+                <div class="row p-3">
+                    <div class="col">
+                        <label for="status">Statut :</label>
+                        <select class="form-control" name="status" id="status">
+                            <?php
+
+                            foreach ($user_status as $status => $level) : ?>
+                                <option value="<?= $level; ?>"
+                                    <?= ($level === $users->status) ? 'selected' : '' ?>
+                                ><?= $status; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="role">Rôle :</label>
+                        <select class="form-control" name="role" id="role">
+                            <?php
+
+                            foreach ($roles as $role => $level) : ?>
+                                <option value="<?= $level; ?>"
+                                    <?= ($level === $users->role) ? 'selected' : '' ?>
+                                ><?= $role; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row mt-3">
             <div class="col text-center">
