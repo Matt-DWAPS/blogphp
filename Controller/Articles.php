@@ -29,9 +29,13 @@ class Articles extends Controller
         $articleId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $post = isset($_POST) ? $_POST : false;
         $article = new Article();
+        $user = new User();
+        $userId = $_SESSION['auth']['id'];
+
+        $users = $user->getUser($userId);
         $comment = new Comment();
         $comments = $comment->getComments($articleId, self::COMMENT_STATUS['PUBLIÉ']);
-        
+
         $articles = $article->getOneArticle($articleId);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['commentForm'] == 'addComment') {
@@ -66,6 +70,7 @@ class Articles extends Controller
             }
         }
         $this->generateView([
+            'users' => $users,
             'articles' => $articles,
             'comments' => $comments,
             'post' => $post,

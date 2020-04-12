@@ -3,8 +3,12 @@
 <h2 class="post-title p-5" id="contenu">Article</h2>
 <div>
     <div class="border p-2 mb-3">
+        <?php if (!empty($articles->picture_url)) : ?>
+            <div class="m-2 justify-content-center d-flex">
+                <img src="<?= $articles->picture_url ?>">
+            </div>
+        <?php endif; ?>
         <h1 class="title pb-3 p-2"><i><?= $articles->title ?></i></h1>
-
         <p class="text-justify pb-2 p-4"><?= $articles->content ?></p>
         <div class="col">
             <p class="font-weight-bold">Publié le <?= $articles->created_at ?></p>
@@ -14,29 +18,31 @@
         <div>
             <form method="post" class="border p-2">
 
-                <?php foreach ($comments as $comment) : ?>
-                    <?php if (empty($comment->picture)) : ?>
-                        <div class="col d-flex">
-                            <div class="col-1 mt-2 mb-2">
-                                <i class="fas fa-user fa-3x img-thumbnail"></i>
-                            </div>
-                            <div class="col-11 d-flex align-items-center">
-                                <label for="username"> <?php echo($_SESSION['auth']['username']); ?>
-                                </label>
-                            </div>
+
+                <?php if (empty($users->picture)) : ?>
+                    <div class="col d-flex">
+                        <div class="col-1 mt-2 mb-2">
+                            <i class="fas fa-user fa-3x img-thumbnail"></i>
                         </div>
-                    <?php else: ?>
-                        <div class="col d-flex">
-                            <div class="col-1 mt-2 mb-2">
-                                <img class="img-fluid img-thumbnail rounded-circle" src="<?= $comment->picture ?>">
-                            </div>
-                            <div class="col-11 d-flex align-items-center">
-                                <label for="username"> <?php echo($_SESSION['auth']['username']); ?>
-                                </label>
-                            </div>
+                        <div class="col-11 d-flex align-items-center">
+                            <label for="username"> <?php $users->username; ?>
+                            </label>
+                            <p><?php ?></p>
                         </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="col d-flex">
+                        <div class="col-1 mt-2 mb-2">
+                            <img class="img-fluid img-thumbnail rounded-circle"
+                                 src="<?= $users->picture ?>">
+                        </div>
+                        <div class="col-11 d-flex align-items-center">
+                            <label for="username"> <a
+                                        href="<?= "dashboard/adminUpdateUser/" . $users->id ?>"><?php echo($users->username); ?></a>
+                            </label>
+                        </div>
+                    </div>
+                <?php endif; ?>
                 <div class="form-group">
                     <label for="content">Contenu du commentaire :</label>
                     <textarea class="form-control input-lg" rows="4" id="content" name="content"
