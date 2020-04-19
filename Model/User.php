@@ -204,6 +204,8 @@ class User extends Model
     public function hydrate($user)
     {
         $this->setCPassword($user->password);
+        $this->setEmail($user->email);
+        $this->setPicture($user->picture);
         $this->setRole($user->role);
         $this->setUsername($user->username);
         $this->setStatus($user->status);
@@ -285,8 +287,9 @@ class User extends Model
 
     public function updateUser()
     {
-        $sql = 'UPDATE user SET role=:role, status=:status WHERE email=:email';
+        $sql = 'UPDATE user SET role=:role, status=:status, email=:email WHERE id=:id';
         $updateUser = $this->executeRequest($sql, array(
+            'id' => $this->getId(),
             'email' => $this->getEmail(),
             'role' => $this->getRole(),
             'status' => $this->getStatus()
@@ -301,7 +304,7 @@ class User extends Model
             'picture' => $this->getPicture()
         ));
     }
-    
+
     public function updateToken()
     {
         $sql = 'UPDATE user SET token=:token WHERE email=:email';

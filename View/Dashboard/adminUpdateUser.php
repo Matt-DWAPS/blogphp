@@ -1,4 +1,9 @@
-<?php $this->title = "Utilisateur"; ?>
+<?php
+/**
+ * @var $users
+ * @var $user
+ */
+$this->title = "Utilisateur"; ?>
 <h2 class="post-title" id="contenu">Informations utilisateur</h2>
 <?php if (isset($_SESSION['flash'])) : ?>
     <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
@@ -7,14 +12,14 @@
 <form method="post">
     <div class="border rounded p-3 pb-5 col-12">
         <div class="row p-2 m-2">
-            <?php if (empty($users->picture)) : ?>
+            <?php if (empty($user->getPicture())) : ?>
                 <div class="border rounded p-2 col-3">
                     <div class="d-flex justify-content-center border p-2">
                         <i class="fas fa-user fa-10x"></i>
                     </div>
                     <div class="border col mt-3 p-2">
                         <a class="btn btn-primary" role="button"
-                           href="<?= "dashboard/pictureUpload/" . $users->id ?>">
+                           href="<?= "dashboard/pictureUpload/" . $user->getId() ?>">
                             Ajouter
                             une photo de profil</a>
                     </div>
@@ -22,11 +27,11 @@
             <?php else: ?>
                 <div class="border rounded p-2 col-3">
                     <div class="d-flex justify-content-center border p-2">
-                        <img class="img-fluid" src="<?= $users->picture ?>">
+                        <img class="img-fluid" src="<?= $user->getPicture() ?>">
                     </div>
                     <div class="border col mt-3 p-2">
                         <a class="btn btn-primary" role="button"
-                           href="<?= "dashboard/pictureUpload/" . $users->id ?>">
+                           href="<?= "dashboard/pictureUpload/" . $user->getId() ?>">
                             Modifier la photo de profil</a>
                     </div>
                 </div>
@@ -34,21 +39,24 @@
             <div class="col">
                 <div class="row p-3">
                     <div class="col text-right">
-                        <p>Date d'inscription : <?= $users->created_at ?></p>
+                        <?php $createdAt = new DateTime($user->getCreatedAt()); ?>
+                        <p>Date d'inscription : <?= $createdAt->format('d/m/Y H:i:s') ?></p>
                     </div>
                 </div>
                 <div class="row p-3">
                     <div class="col">
                         <label for="username">Nom d'utilisateur :</label>
                         <input class="form-control" type="text" id="username" name="username"
-                               value="<?= $users->username ?>">
+                               value="<?= $user->getUsername() ?>">
                     </div>
                     <div class="col">
                         <label for="email">Adresse email :</label>
                         <input class="form-control" type="email" id="email" name="email"
-                               value="<?= $users->email, isset($post['email']) ? $post['email
-                       '] : ''; ?>">
+                               value="<?= isset($post['email']) ? $post['email
+                       '] : $user->getEmail(); ?>">
+
                         <p class="text-danger"><?= isset($errorsMsg['email']) ? $errorsMsg['email'] : ''; ?></p>
+
                     </div>
                 </div>
                 <div class="row p-3">
@@ -59,7 +67,7 @@
 
                             foreach ($user_status as $status => $level) : ?>
                                 <option value="<?= $level; ?>"
-                                    <?= ($level === $users->status) ? 'selected' : '' ?>
+                                    <?= ($level === $user->getStatus()) ? 'selected' : '' ?>
                                 ><?= $status; ?></option>
                             <? endforeach; ?>
                         </select>
@@ -71,7 +79,7 @@
 
                             foreach ($roles as $role => $level) : ?>
                                 <option value="<?= $level; ?>"
-                                    <?= ($level === $users->role) ? 'selected' : '' ?>
+                                    <?= ($level === $user->getRole()) ? 'selected' : '' ?>
                                 ><?= $role; ?></option>
                             <? endforeach; ?>
                         </select>

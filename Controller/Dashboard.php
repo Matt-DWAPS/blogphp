@@ -15,7 +15,16 @@ class Dashboard extends Controller
         if (!isset($_SESSION['auth'])) {
             header('Location: /home');
             exit();
-        }
+        } /*elseif (isset($_SESSION['auth']) && $_SESSION['auth']['roles'] == 'MEMBER') {
+            $comment = new Comment();
+            $commentsConfirmed = $comment->getCommentsByUserId($userId, 'CONFIRMED');
+            $commentsReported = $comment->getCommentsByUserId($userId, 'REPORT');
+            $this->generateView([
+                'confirmed' => $commentsConfirmed,
+                'reported' => $commentsReported,
+            ]);
+            exit();
+        }*/
         $user = new User();
         $users = $user->getAllUserDashboard();
         $article = new Article();
@@ -42,7 +51,12 @@ class Dashboard extends Controller
         $post = isset($_POST) ? $_POST : false;
 
         $users = $user->getUser($userId);
-
+        $user->hydrate($users);
+        /*
+                echo '<pre>';
+                print_r($users);
+                print_r($user);
+                die();*/
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['userForm'] == 'updateUser') {
                 $user->setEmail($post['email']);
@@ -54,7 +68,8 @@ class Dashboard extends Controller
             }
         }
         $this->generateView([
-            'users' => $users,
+            
+            'user' => $user,
             'roles' => $roles,
             'user_status' => $user_status,
         ]);
