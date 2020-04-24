@@ -287,7 +287,7 @@ class User extends Model
 
     public function updateUser()
     {
-        $sql = 'UPDATE user SET role=:role, status=:status, email=:email WHERE id=:id';
+        $sql = 'UPDATE user SET role=:role, status=:status, email=:email WHERE email=:email';
         $updateUser = $this->executeRequest($sql, array(
             'id' => $this->getId(),
             'email' => $this->getEmail(),
@@ -335,7 +335,7 @@ class User extends Model
 
     public function getUserInBdd($status = null)
     {
-        $sql = 'SELECT username, email, password, role, status, created_at, id FROM user WHERE email= :email';
+        $sql = 'SELECT username, email, password, role, status, created_at, id, picture FROM user WHERE email= :email';
 
         if ($status !== null) {
             $sql .= ' AND status = :status';

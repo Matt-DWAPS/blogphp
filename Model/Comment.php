@@ -12,7 +12,6 @@ class Comment extends Model
     private $status;
     private $user_id;
     private $article_id;
-    private $picture;
 
     private $errors = 0;
     private $errorsMsg = [];
@@ -115,22 +114,6 @@ class Comment extends Model
     }
 
     /**
-     * @return mixed
-     */
-    public function getPicture()
-    {
-        return $this->picture;
-    }
-
-    /**
-     * @param mixed $picture
-     */
-    public function setPicture($picture)
-    {
-        $this->picture = $picture;
-    }
-
-    /**
      * @return int
      */
     public function getErrors()
@@ -219,6 +202,24 @@ class Comment extends Model
         return $comments->fetchAll();
     }
 
+    public function getCommentsUser($userId, $status = null)
+    {
+        $sql = 'SELECT comment.id as id, comment.created_at as created_at, comment.content as content, comment.user_id as user_id, comment.article_id as article_id, user.username, user.picture FROM comment INNER JOIN user ON comment.user_id = user.id WHERE comment.user_id=:id';
+
+        if ($status !== null) {
+            $sql .= ' AND comment.status=:status ORDER BY comment.created_at DESC';
+            $comments = $this->executeRequest($sql, array(
+                'status' => $status,
+                'id' => $userId,
+            ));
+            return $comments->fetchAll();
+        }
+        $comments = $this->executeRequest($sql, array(
+            'id' => $userId,
+        ));
+        return $comments->fetchAll();
+    }
+
     /**
      * @param $commentId
      */
@@ -246,7 +247,6 @@ class Comment extends Model
         $this->setUserId($comment->user_id);
         $this->setStatus($comment->status);
         $this->setArticleId($comment->article_id);
-        $this->setPicture($comment->picture);
         $this->setId($comment->id);
     }
 

@@ -15,22 +15,36 @@ class Dashboard extends Controller
         if (!isset($_SESSION['auth'])) {
             header('Location: /home');
             exit();
-        } /*elseif (isset($_SESSION['auth']) && $_SESSION['auth']['roles'] == 'MEMBER') {
+        } elseif (isset($_SESSION['auth']) && $_SESSION['auth']['role'] == '20') {
+            $roles = self::ROLES;
+            $user_status = self::STATUS;
+            $user = new User();
+            $userId = $_SESSION['auth']['id'];
+            $users = $user->getUser($userId);
+            $user->hydrate($users);
+
             $comment = new Comment();
-            $commentsConfirmed = $comment->getCommentsByUserId($userId, 'CONFIRMED');
-            $commentsReported = $comment->getCommentsByUserId($userId, 'REPORT');
+            $commentsConfirmed = $comment->getCommentsUser($userId, self::COMMENT_STATUS['PUBLIÉ']);
+            $comment->hydrate($commentsConfirmed);
+            $commentsReported = $comment->getCommentsUser($userId, self::COMMENT_STATUS['EN ATTENTE']);
+            $comment->hydrate($commentsReported);
+
             $this->generateView([
+                'user' => $user,
+                'roles' => $roles,
                 'confirmed' => $commentsConfirmed,
                 'reported' => $commentsReported,
             ]);
             exit();
-        }*/
+        }
         $user = new User();
         $users = $user->getAllUserDashboard();
         $article = new Article();
         $articles = $article->getAllArticles();
         $comment = new Comment();
         $comments = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
+        $roles = self::ROLES;
+
 
         $this->generateView([
             'articles' => $articles,
@@ -63,12 +77,16 @@ class Dashboard extends Controller
                 $user->setRole($post['role']);
                 $user->setStatus($post['status']);
                 $user->updateUser();
+                $_SESSION['auth']['role'] = $user->getRole();
+                $_SESSION['auth']['username'] = $user->getUsername();
+                $_SESSION['auth']['email'] = $user->getEmail();
+                $_SESSION['auth']['status'] = $user->getStatus();
                 $_SESSION['flash']['alert'] = "Success";
                 $_SESSION['flash']['infos'] = "Modification effectué avec succès !";
             }
         }
         $this->generateView([
-            
+
             'user' => $user,
             'roles' => $roles,
             'user_status' => $user_status,

@@ -19,13 +19,13 @@
             <form method="post" class="border p-2">
 
 
-                <?php if (empty($users->picture)) : ?>
+                <?php if (empty($_SESSION['auth']['picture'])) : ?>
                     <div class="col d-flex">
                         <div class="col-1 mt-2 mb-2">
                             <i class="fas fa-user fa-3x img-thumbnail"></i>
                         </div>
                         <div class="col-11 d-flex align-items-center">
-                            <label for="username"> <?php $users->username; ?>
+                            <label for="username"> <?php $_SESSION['auth']['username']; ?>
                             </label>
                             <p><?php ?></p>
                         </div>
@@ -34,11 +34,11 @@
                     <div class="col d-flex">
                         <div class="col-1 mt-2 mb-2">
                             <img class="img-fluid img-thumbnail rounded-circle"
-                                 src="<?= $users->picture ?>">
+                                 src="<?= $_SESSION['auth']['picture'] ?>">
                         </div>
                         <div class="col-11 d-flex align-items-center">
                             <label for="username"> <a
-                                        href="<?= "dashboard/adminUpdateUser/" . $users->id ?>"><?php echo($users->username); ?></a>
+                                        href="<?= "dashboard/adminUpdateUser/" . $_SESSION['auth']['id'] ?>"><?php echo($_SESSION['auth']['username']); ?></a>
                             </label>
                         </div>
                     </div>

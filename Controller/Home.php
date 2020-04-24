@@ -142,7 +142,7 @@ class Home extends Controller
                 $user->updateUser();
                 $_SESSION['flash']['alert'] = "success";
                 $_SESSION['flash']['message'] = "Votre compte est désormais activé, vous pouvez dès à présent vous connecter à l'aide de vos identifiants";
-                header('Location: /home/registration');
+                header('Location: /home/login');
                 exit();
             }
         }
@@ -213,6 +213,7 @@ class Home extends Controller
                         $user->hydrate($userBdd);
                         if ($user->login()) {
                             $_SESSION['auth']['username'] = $user->getUsername();
+                            $_SESSION['auth']['picture'] = $user->getPicture();
                             $_SESSION['auth']['email'] = $user->getEmail();
                             $_SESSION['auth']['role'] = $user->getRole();
                             $_SESSION['auth']['status'] = $user->getStatus();

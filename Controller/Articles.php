@@ -29,36 +29,36 @@ class Articles extends Controller
         $articleId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $post = isset($_POST) ? $_POST : false;
         $article = new Article();
-        $user = new User();
+        $articles = $article->getOneArticle($articleId);
+        $article->hydrate($article->getOneArticle($articleId));
+        $test = 1; // TODO
         $userId = $_SESSION['auth']['id'];
 
-        $users = $user->getUser($userId);
         $comment = new Comment();
-        $comments = $comment->getComments($articleId, self::COMMENT_STATUS['PUBLIÉ']);
+        $comments = $comment->getComments($article->getId(), self::COMMENT_STATUS['PUBLIÉ']);
+        /*
+                echo '<pre>';
+                print_r($articles);
+                print_r($article);
+                die();
+        */
 
-        $articles = $article->getOneArticle($articleId);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['commentForm'] == 'addComment') {
                 $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING);
                 $comment->setContent($content);
-                $comment->setUserId($post['user_id']);
+                $comment->setUserId($userId);
                 if ($comment->checkCommentValidate()) {
                     $dateNow = new DateTime();
                     $comment->setCreatedAt($dateNow->format('Y-m-d H:i:s'));
-                    if (isset($post['publish'])) {
-                        $comment->setStatus(self::COMMENT_STATUS['PUBLIÉ']);
-                    } else {
-                        $_SESSION['flash']['alert'] = "danger";
-                        $_SESSION['flash']['message'] = "Une erreur est survenue, veuillez ressayer ulterieurement";
-                        header('Location: /articles');
-                        exit;
-                    }
-                    $comment->setUserId($_SESSION['auth']['id']);
-                    $comment->setArticleId($articleId);
+
+                    $comment->setStatus(self::COMMENT_STATUS['PUBLIÉ']);
+                    $comment->setUserId($userId);
+                    $comment->setArticleId($article->getId());
                     $comment->save();
                     $_SESSION['flash']['alert'] = "success";
                     $_SESSION['flash']['message'] = "Merci pour votre commentaire";
-                    header('Location: /articles/read/' . $articleId);
+                    header('Location: /articles/read/' . $article->getId());
                     exit;
                 } else {
                     $_SESSION['flash']['alert'] = "danger";
@@ -70,7 +70,6 @@ class Articles extends Controller
             }
         }
         $this->generateView([
-            'users' => $users,
             'articles' => $articles,
             'comments' => $comments,
             'post' => $post,
