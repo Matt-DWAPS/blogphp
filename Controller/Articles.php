@@ -36,12 +36,12 @@ class Articles extends Controller
 
         $comment = new Comment();
         $comments = $comment->getComments($article->getId(), self::COMMENT_STATUS['PUBLIÉ']);
-        /*
-                echo '<pre>';
-                print_r($articles);
-                print_r($article);
-                die();
-        */
+
+        echo '<pre>';
+        print_r($articles);
+        print_r($article);
+        die();
+        
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['commentForm'] == 'addComment') {

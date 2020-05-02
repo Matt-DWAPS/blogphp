@@ -296,6 +296,16 @@ class User extends Model
         ));
     }
 
+    public function updateUserProfile()
+    {
+        $sql = 'UPDATE user SET email=:email, username=:username WHERE email=:email';
+        $updateUser = $this->executeRequest($sql, array(
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'username' => $this->getUsername(),
+        ));
+    }
+
     public function updatePictureUser()
     {
         $sql = 'UPDATE user SET picture=:picture WHERE id=:id';
@@ -374,6 +384,17 @@ class User extends Model
         $this->checkUsername();
         $this->checkEmail();
         $this->checkPassword();
+        if ($this->errors !== 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function userFormValidate()
+    {
+        $this->checkUsername();
+        $this->checkEmail();
         if ($this->errors !== 0) {
             return false;
         } else {

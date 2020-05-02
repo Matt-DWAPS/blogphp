@@ -203,7 +203,9 @@ $this->title = "Espace membre"; ?>
                         <div class="col">
                             <label for="username">Nom d'utilisateur :</label>
                             <input class="form-control" type="text" id="username" name="username"
-                                   value="<?= $user->getUsername() ?>">
+                                   value="<?= isset($post['username']) ? $post['username
+                       '] : $user->getUsername(); ?>">
+                            <p class="text-danger"><?= isset($errorsMsg['username']) ? $errorsMsg['username'] : ''; ?></p>
                         </div>
                         <div class="col">
                             <label for="email">Adresse email :</label>
@@ -216,7 +218,7 @@ $this->title = "Espace membre"; ?>
                         </div>
                     </div>
                     <div class="row p-3">
-                        <div class="col-auto">
+                        <div class="col-6">
                             <label for="role">Rôle :</label>
                             <input class="form-control" name="role" id="role"
                                    value="<?php
@@ -238,7 +240,14 @@ $this->title = "Espace membre"; ?>
                                            break;
                                        default:
                                            $role = 'Rôle non défini';
-                                   } ?><?= $role ?>" readonly>
+                                   } ?><?= $role ?>" readonly/>
+                        </div>
+                        <div class="col-6 text-center pt-4">
+
+                            <a class="btn btn-primary" role="button"
+                               href="<?= "dashboard/updatePasswordUser/" . $user->getId() ?>">Modifier le mot de
+                                passe</a>
+
                         </div>
                     </div>
                 </div>
@@ -260,7 +269,7 @@ $this->title = "Espace membre"; ?>
         <?php else: ?>
             <?php foreach ($confirmed as $comment) : ?>
                 <div class="border rounded p-2 mb-2">
-                    <?php $date = new DateTime($comment->created_at); ?>
+                    <?php $date = new DateTime($comment->getCreatedAt()); ?>
                     <p class="m-0 pb-3">Posté le : <?= $date->format('d-m-Y'); ?> à <?= $date->format('h:i:s'); ?></p>
                     <div class="border">
                         <?php if (empty($comment->picture)) : ?>
@@ -270,7 +279,7 @@ $this->title = "Espace membre"; ?>
                                 </div>
                                 <div class="col-11 d-flex align-items-center">
                                 <span><u><?= $comment->username ?></u> Dit
-                                : <?= $comment->content ?></span>
+                                : <?= $comment->getContent() ?></span>
                                 </div>
                             </div>
                         <?php else: ?>
@@ -280,7 +289,7 @@ $this->title = "Espace membre"; ?>
                                 </div>
                                 <div class="col-11 d-flex align-items-center">
                                     <p class=""><u><?= $comment->username ?></u> Dit
-                                        : <?= $comment->content ?></p>
+                                        : <?= $comment->getContent() ?></p>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -290,14 +299,14 @@ $this->title = "Espace membre"; ?>
 
                     <div class="input d-flex justify-content-end">
                         <a class=" btn-link text-success" role="button"
-                           href="<?= "articles/read/" . $comment->article_id ?>">Lien vers l'article</a>
+                           href="<?= "articles/read/" . $comment->getArticleId() ?>">Lien vers l'article</a>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
     <div class="commentsReported">
-        <h2>Mes commentaires signaler</h2>
+        <h2>Mes commentaires signalés</h2>
 
         <?php if (empty($reported)) : ?>
             <div class="border">
@@ -306,7 +315,7 @@ $this->title = "Espace membre"; ?>
         <?php else: ?>
             <?php foreach ($reported as $comment) : ?>
                 <div class="border rounded p-2 mb-2">
-                    <?php $date = new DateTime($comment->created_at); ?>
+                    <?php $date = new DateTime($comment->getCreatedAt()); ?>
                     <p class="m-0 pb-3">Posté le : <?= $date->format('d-m-Y'); ?> à <?= $date->format('h:i:s'); ?></p>
                     <div class="border">
                         <?php if (empty($comment->picture)) : ?>
@@ -316,24 +325,25 @@ $this->title = "Espace membre"; ?>
                                 </div>
                                 <div class="col-11 d-flex align-items-center">
                                 <span><u><?= $comment->username ?></u> Dit
-                                : <?= $comment->content ?></span>
+                                : <?= $comment->getContent() ?></span>
                                 </div>
                             </div>
                         <?php else: ?>
                             <div class="col d-flex">
                                 <div class="col-1 mt-2 mb-2">
-                                    <img class="img-fluid img-thumbnail rounded-circle" src="<?= $comment->picture ?>">
+                                    <img class="img-fluid img-thumbnail rounded-circle"
+                                         src="<?= $comment->picture ?>">
                                 </div>
                                 <div class="col-11 d-flex align-items-center">
                                     <p class=""><u><?= $comment->username ?></u> Dit
-                                        : <?= $comment->content ?></p>
+                                        : <?= $comment->getContent() ?></p>
                                 </div>
                             </div>
                         <?php endif; ?>
                     </div>
                     <div class="input d-flex justify-content-end">
                         <a class=" btn-link text-success" role="button"
-                           href="<?= "articles/read/" . $comment->article_id ?>">Lien vers l'article</a>
+                           href="<?= "articles/read/" . $comment->getArticleId() ?>">Lien vers l'article</a>
                     </div>
                 </div>
             <?php endforeach; ?>
