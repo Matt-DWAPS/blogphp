@@ -272,23 +272,24 @@ $this->title = "Espace membre"; ?>
                     <?php $date = new DateTime($comment->getCreatedAt()); ?>
                     <p class="m-0 pb-3">Posté le : <?= $date->format('d-m-Y'); ?> à <?= $date->format('h:i:s'); ?></p>
                     <div class="border">
-                        <?php if (empty($comment->picture)) : ?>
+                        <?php if (empty($user->getPicture())) : ?>
                             <div class="col d-flex">
                                 <div class="col-1 mt-2 mb-2">
                                     <i class="fas fa-user fa-3x img-thumbnail"></i>
                                 </div>
                                 <div class="col-11 d-flex align-items-center">
-                                <span><u><?= $comment->username ?></u> Dit
+                                <span><u><?= $user->getUsername() ?></u> Dit
                                 : <?= $comment->getContent() ?></span>
                                 </div>
                             </div>
                         <?php else: ?>
                             <div class="col d-flex">
                                 <div class="col-1 mt-2 mb-2">
-                                    <img class="img-fluid img-thumbnail rounded-circle" src="<?= $comment->picture ?>">
+                                    <img class="img-fluid img-thumbnail rounded-circle"
+                                         src="<?= $user->getPicture() ?>">
                                 </div>
                                 <div class="col-11 d-flex align-items-center">
-                                    <p class=""><u><?= $comment->username ?></u> Dit
+                                    <p class=""><u><?= $user->getUsername() ?></u> Dit
                                         : <?= $comment->getContent() ?></p>
                                 </div>
                             </div>
@@ -318,13 +319,13 @@ $this->title = "Espace membre"; ?>
                     <?php $date = new DateTime($comment->getCreatedAt()); ?>
                     <p class="m-0 pb-3">Posté le : <?= $date->format('d-m-Y'); ?> à <?= $date->format('h:i:s'); ?></p>
                     <div class="border">
-                        <?php if (empty($comment->picture)) : ?>
+                        <?php if (empty($user->getPicture())) : ?>
                             <div class="col d-flex">
                                 <div class="col-1 mt-2 mb-2">
                                     <i class="fas fa-user fa-3x img-thumbnail"></i>
                                 </div>
                                 <div class="col-11 d-flex align-items-center">
-                                <span><u><?= $comment->username ?></u> Dit
+                                <span><u><?= $user->getUsername() ?></u> Dit
                                 : <?= $comment->getContent() ?></span>
                                 </div>
                             </div>
@@ -332,10 +333,10 @@ $this->title = "Espace membre"; ?>
                             <div class="col d-flex">
                                 <div class="col-1 mt-2 mb-2">
                                     <img class="img-fluid img-thumbnail rounded-circle"
-                                         src="<?= $comment->picture ?>">
+                                         src="<?= $user->getPicture() ?>">
                                 </div>
                                 <div class="col-11 d-flex align-items-center">
-                                    <p class=""><u><?= $comment->username ?></u> Dit
+                                    <p class=""><u><?= $user->getUsername() ?></u> Dit
                                         : <?= $comment->getContent() ?></p>
                                 </div>
                             </div>

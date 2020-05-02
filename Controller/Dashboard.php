@@ -28,13 +28,13 @@ class Dashboard extends Controller
             $users = $user->getUser($userId);
             $user->hydrate($users);
 
-
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($post['userForm'] == 'updateUser') {
                     $user->setUsername($post['username']);
                     $user->setEmail($post['email']);
                     if ($user->userFormValidate()) {
                         if ($user->registerValidate()) {
+                            // TODO
                             $user->updateUserProfile();
                             $_SESSION['auth']['username'] = $user->getUsername();
                             $_SESSION['auth']['email'] = $user->getEmail();
@@ -47,8 +47,6 @@ class Dashboard extends Controller
                         /*echo '<pre>';
                         print_r($user);
                         die();*/
-
-
                     }
                 } else {
                     $_SESSION['flash']['alert'] = "danger";
@@ -187,28 +185,49 @@ class Dashboard extends Controller
 
         $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $users = $user->getUser($userId);
-        $dossier = 'content/uploads/users/';
+        $path = 'content/uploads/users/';
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($post['pictureUpload'] == 'upload') {
-                // mettre un répertoire profils
-                // vérifier le type mime
-                // récupérer l'extension
-                // vérifier l'extension parmi un tableau de constante (jpg, jpeg, png)
-                $fichier = basename($_FILES['picture']['name']);
-                // $fichier = $userId . $extension
-                if (move_uploaded_file($_FILES['picture']['tmp_name'], $dossier . $fichier)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
-                {
-                    $usersBdd = $user->hydrate($users);
-                    $user->setPicture($dossier . $fichier);
-                    $user->updatePictureUser();
-                    $_SESSION['flash']['alert'] = "Success";
-                    $_SESSION['flash']['infos'] = "Upload effectué avec succès !";
-                    header('Location: /dashboard/adminUpdateUser/' . $users->id);
-                    exit;
-                } else //Sinon (la fonction renvoie FALSE).
-                {
-                    echo 'Echec de l\'upload !';
+                // Vérifie si le fichier a été uploadé sans erreur.
+                if (isset($_FILES["picture"]) && $_FILES["picture"]["error"] == 0) {
+                    $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
+                    $filename = $_FILES["picture"]["name"];
+                    $filetype = $_FILES["picture"]["type"];
+                    $filesize = $_FILES["picture"]["size"];
+
+                    // Vérifie l'extension du fichier
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if (!array_key_exists($ext, $allowed)) die("Erreur : Veuillez sélectionner un format de fichier valide.");
+
+                    // Vérifie la taille du fichier - 5Mo maximum
+                    $maxsize = self::MAX_SIZE;
+                    if ($filesize > $maxsize) die("Error: La taille du fichier est supérieure à la limite autorisée.");
+
+                    // Vérifie le type MIME du fichier
+                    if (in_array($filetype, $allowed)) {
+                        // Vérifie si le fichier existe avant de le télécharger.
+                        if (file_exists($path . $_FILES["picture"]["name"])) {
+                            $_SESSION['flash']['alert'] = "danger";
+                            $_SESSION['flash']['infos'] = $_FILES["picture"]["name"] . " existe déjà.";
+                        } else {
+                            move_uploaded_file($_FILES["picture"]["tmp_name"], $path . $userId . "." . $ext);
+                            $usersBdd = $user->hydrate($users);
+                            $user->setPicture($path . $userId . "." . $ext);
+
+                            $user->updatePictureUser();
+                            $_SESSION['flash']['alert'] = "Success";
+                            $_SESSION['flash']['infos'] = "Votre fichier a été téléchargé avec succès.";
+                            header('Location: /dashboard/');
+                            exit;
+                        }
+                    } else {
+                        $_SESSION['flash']['alert'] = "danger";
+                        $_SESSION['flash']['infos'] = "Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer.";
+                    }
+                } else {
+                    $_SESSION['flash']['alert'] = "danger";
+                    $_SESSION['flash']['infos'] = "Erreur " . $_FILES["picture"]["error"];
                 }
             }
         }

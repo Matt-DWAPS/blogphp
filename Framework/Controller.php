@@ -9,6 +9,8 @@ abstract class Controller
     const FROMEMAIL = 'jeanforteroche@webagency-matt.com';
     const AUTHOREMAIL = 'Jean ForteRoche';
 
+    const MAX_SIZE = 5 * 1024 * 1024;
+
     const ROLES = [
         'BANNI' => '0',
         'VISITEUR' => '10',
@@ -86,7 +88,7 @@ abstract class Controller
         $vue = new View($action, 'Mails');
         $body = $vue->generateMail($data);
 
-        
+
         $transport = (new Swift_SmtpTransport(
             Configuration::get('mailtransport', 'mailport')))
             ->setUsername(Configuration::get('mailusername'))
