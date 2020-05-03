@@ -25,43 +25,46 @@ $this->title = "Espace membre"; ?>
             </tr>
             </thead>
             <tbody>
-
-            <tr>
-                <td class="text-center"><?= $user->getCreatedAt() ?></td>
-                <td><?= $user->username ?></td>
-                <td><?= $user->email ?></td>
-                <td><?php
-                    switch ($user->role) {
-                        case 0:
-                            $role = 'Banni';
-                            break;
-                        case 10:
-                            $role = 'Visiteur';
-                            break;
-                        case 20:
-                            $role = 'Membre';
-                            break;
-                        case 75:
-                            $role = 'Administrateur';
-                            break;
-                        case 99:
-                            $role = 'Super Administrateur';
-                            break;
-                        default:
-                            $role = 'Rôle non défini';
-                    } ?>
-                    <?= $role ?>
-                </td>
-                <td><?php if ($user->status == 1) {
-                        echo "Actif";
-                    } elseif ($user->status == 0) {
-                        echo "Non actif";
-                    } ?></td>
-                <td>
-                    <a class=" btn btn-primary" role="button"
-                       href="<?= "dashboard/adminUpdateUser/" . $user->id ?>">Modifier</a>
-                </td>
-            </tr>
+            <?php foreach ($users as $user) :
+                $createAt = new DateTime($user->getCreatedAt());
+                ?>
+                <tr>
+                    <td class="text-center"><?= $createAt->format('d-m-Y'); ?></td>
+                    <td><?= $user->getUsername() ?></td>
+                    <td><?= $user->getEmail() ?></td>
+                    <td><?php
+                        switch ($user->getRole()) {
+                            case 0:
+                                $role = 'Banni';
+                                break;
+                            case 10:
+                                $role = 'Visiteur';
+                                break;
+                            case 20:
+                                $role = 'Membre';
+                                break;
+                            case 75:
+                                $role = 'Administrateur';
+                                break;
+                            case 99:
+                                $role = 'Super Administrateur';
+                                break;
+                            default:
+                                $role = 'Rôle non défini';
+                        } ?>
+                        <?= $role ?>
+                    </td>
+                    <td><?php if ($user->getStatus() == 1) {
+                            echo "Actif";
+                        } elseif ($user->getstatus() == 0) {
+                            echo "Non actif";
+                        } ?></td>
+                    <td>
+                        <a class=" btn btn-primary" role="button"
+                           href="<?= "dashboard/adminUpdateUser/" . $user->getId() ?>">Modifier</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>
