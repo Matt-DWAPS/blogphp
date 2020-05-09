@@ -34,8 +34,9 @@ class Dashboard extends Controller
                     $user->setUsername($post['username']);
                     $user->setEmail($post['email']);
                     if ($user->userFormValidate()) {
-                        if ($user->registerValidate()) {
-                            // TODO
+                        $emailInBdd = $user->getEmailInBdd();
+                        $usernameInBdd = $user->getUsernameInBdd();
+                        if (!array_key_exists('id', $emailInBdd) && !array_key_exists('id', $usernameInBdd)) {
                             $user->updateUserProfile();
                             $_SESSION['auth']['username'] = $user->getUsername();
                             $_SESSION['auth']['email'] = $user->getEmail();
@@ -45,9 +46,6 @@ class Dashboard extends Controller
                             $_SESSION['flash']['alert'] = "danger";
                             $_SESSION['flash']['infos'] = "Le nom d'utilisateur ou l'adresse email existe déjà";
                         }
-                        /*echo '<pre>';
-                        print_r($user);
-                        die();*/
                     }
                 } else {
                     $_SESSION['flash']['alert'] = "danger";
@@ -189,8 +187,9 @@ class Dashboard extends Controller
     /**
      * @throws Exception
      */
-    public function pictureUpload()
+    public function pictureUpload() // $value = 'article' ; 'avatar'
     {
+
         $user = new User();
         $post = isset($_POST) ? $_POST : false;
 

@@ -298,7 +298,7 @@ class User extends Model
 
     public function updateUserProfile()
     {
-        $sql = 'UPDATE user SET email=:email, username=:username WHERE email=:email';
+        $sql = 'UPDATE user SET email=:email, username=:username WHERE id=:id';
         $updateUser = $this->executeRequest($sql, array(
             'id' => $this->getId(),
             'email' => $this->getEmail(),
@@ -418,6 +418,26 @@ class User extends Model
             return true;
         }
         return false;
+    }
+
+    public function getEmailInBdd()
+    {
+        $sql = 'SELECT id FROM user WHERE email=:email AND id!=:id';
+        $req = $this->executeRequest($sql, array(
+            'email' => $this->getEmail(),
+            'id' => $this->getId()
+        ));
+        return $req->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getUsernameInBdd()
+    {
+        $sql = 'SELECT id FROM user WHERE username=:username AND id!=:id';
+        $req = $this->executeRequest($sql, array(
+            'username' => $this->getUsername(),
+            'id' => $this->getId()
+        ));
+        return $req->fetch(PDO::FETCH_ASSOC);
     }
 
     private function checkUsername()
