@@ -21,7 +21,6 @@ class Dashboard extends Controller
             exit();
         } elseif (isset($_SESSION['auth']) && $_SESSION['auth']['role'] == '20') {
             $post = isset($_POST) ? $_POST : false;
-
             $roles = self::ROLES;
             $user_status = self::STATUS;
             $user = new User();
@@ -37,7 +36,13 @@ class Dashboard extends Controller
                         $emailInBdd = $user->getEmailInBdd();
                         $usernameInBdd = $user->getUsernameInBdd();
                         if (!array_key_exists('id', $emailInBdd) && !array_key_exists('id', $usernameInBdd)) {
+
+                            $data = [
+                                'username' => $user->getUsername(),
+                                'email' => $user->getEmail()
+                            ];
                             $user->updateUserProfile();
+                            $this->sendEmail('updateAccountUser', 'Modification de votre compte sur le blog Jean ForteRoche', $user->getEmail(), $data);
                             $_SESSION['auth']['username'] = $user->getUsername();
                             $_SESSION['auth']['email'] = $user->getEmail();
                             $_SESSION['flash']['alert'] = "Success";
