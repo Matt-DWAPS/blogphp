@@ -126,7 +126,7 @@ $this->title = "Espace membre"; ?>
             <div>
                 <h2 class="text-center">Commentaires en attentes</h2>
                 <?php if (isset($_SESSION['flash'])) : ?>
-                    <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
+                    <p class="text-center font-weight-bold text-success alert">
                         <?= $_SESSION['flash']['infos']; ?></p>
                 <?php endif; ?>
             </div>
@@ -164,10 +164,6 @@ $this->title = "Espace membre"; ?>
         <? endif; ?>
     </div>
 <?php else : ?>
-    <?php if (isset($_SESSION['flash'])) : ?>
-        <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
-            <?= $_SESSION['flash']['infos']; ?></p>
-    <?php endif; ?>
     <form method="post">
         <div class="border rounded p-3 pb-5 col-12">
             <div class="row p-2 m-2">

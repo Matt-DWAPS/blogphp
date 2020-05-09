@@ -41,7 +41,7 @@ class Dashboard extends Controller
                             $_SESSION['auth']['username'] = $user->getUsername();
                             $_SESSION['auth']['email'] = $user->getEmail();
                             $_SESSION['flash']['alert'] = "Success";
-                            $_SESSION['flash']['infos'] = "Modification effectué avec succès !";
+                            $_SESSION['flash']['message'] = "Modification effectué avec succès !";
                         } else {
                             $_SESSION['flash']['alert'] = "danger";
                             $_SESSION['flash']['infos'] = "Le nom d'utilisateur ou l'adresse email existe déjà";
