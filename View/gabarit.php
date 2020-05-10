@@ -40,9 +40,6 @@
                 <a class="nav-link" href="/Home">Accueil</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/home/about">Plus d'infos</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="/articles">Articles</a>
             </li>
             <li class="nav-item">
