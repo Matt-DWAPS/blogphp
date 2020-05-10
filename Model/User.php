@@ -287,12 +287,13 @@ class User extends Model
 
     public function updateUser()
     {
-        $sql = 'UPDATE user SET role=:role, status=:status, email=:email WHERE email=:email';
+        $sql = 'UPDATE user SET role=:role, status=:status, email=:email, username=:username WHERE email=:email';
         $updateUser = $this->executeRequest($sql, array(
             'id' => $this->getId(),
             'email' => $this->getEmail(),
             'role' => $this->getRole(),
-            'status' => $this->getStatus()
+            'status' => $this->getStatus(),
+            'username' => $this->getUsername()
         ));
     }
 

@@ -49,13 +49,9 @@ class Dashboard extends Controller
                             $_SESSION['flash']['message'] = "Modification effectué avec succès !";
                         } else {
                             $_SESSION['flash']['alert'] = "danger";
-                            $_SESSION['flash']['infos'] = "Le nom d'utilisateur ou l'adresse email existe déjà";
+                            $_SESSION['flash']['message'] = "Le nom d'utilisateur ou l'adresse email existe déjà";
                         }
                     }
-                } else {
-                    $_SESSION['flash']['alert'] = "danger";
-                    $_SESSION['flash']['message'] = "Identifiant indisponible";
-                    die();
                 }
             }
 
@@ -162,27 +158,29 @@ class Dashboard extends Controller
 
         $users = $user->getUser($userId);
         $user->hydrate($users);
-        /*
-                echo '<pre>';
-                print_r($users);
-                print_r($user);
-                die();*/
+        
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['userForm'] == 'updateUser') {
                 $user->setEmail($post['email']);
+                $user->setUsername($post['username']);
                 $user->setRole($post['role']);
                 $user->setStatus($post['status']);
-                $user->updateUser();
-                $_SESSION['auth']['role'] = $user->getRole();
-                $_SESSION['auth']['username'] = $user->getUsername();
-                $_SESSION['auth']['email'] = $user->getEmail();
-                $_SESSION['auth']['status'] = $user->getStatus();
-                $_SESSION['flash']['alert'] = "Success";
-                $_SESSION['flash']['infos'] = "Modification effectué avec succès !";
+                if ($user->userFormValidate()) {
+                    $emailInBdd = $user->getEmailInBdd();
+                    $usernameInBdd = $user->getUsernameInBdd();
+                    if (!array_key_exists('id', $emailInBdd) && !array_key_exists('id', $usernameInBdd)) {
+                        $user->updateUser();
+                        $_SESSION['flash']['alert'] = "Success";
+                        $_SESSION['flash']['message'] = "Modification effectué avec succès !";
+                    } else {
+                        $_SESSION['flash']['alert'] = "danger";
+                        $_SESSION['flash']['message'] = "Le nom d'utilisateur ou l'adresse email existe déjà";
+                    }
+                }
             }
         }
         $this->generateView([
-
             'user' => $user,
             'roles' => $roles,
             'user_status' => $user_status,

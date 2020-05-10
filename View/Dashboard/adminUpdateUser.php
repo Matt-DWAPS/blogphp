@@ -4,11 +4,12 @@
  * @var $user
  */
 $this->title = "Utilisateur"; ?>
-<h2 class="post-title" id="contenu">Informations utilisateur</h2>
 <?php if (isset($_SESSION['flash'])) : ?>
     <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
-        <?= $_SESSION['flash']['infos']; ?></p>
+        <?= $_SESSION['flash']['message']; ?></p>
 <?php endif; ?>
+<h2 class="post-title" id="contenu">Informations utilisateur</h2>
+
 <form method="post">
     <div class="border rounded p-3 pb-5 col-12">
         <div class="row p-2 m-2">
