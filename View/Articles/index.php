@@ -12,7 +12,7 @@
     <?php if (empty($article->picture_url)) : ?>
         <div class="border m-2 p-2 row">
             <div class="d-flex">
-                <div class="col-12 d-flex align-items-center justify-content-center">
+                <div class="col-12 d-flex align-items-center">
                     <div>
                         <a href="<?= "/articles/read/" . $article->id ?>">
                             <h3 class="title"><?= $article->title; ?></h3>
@@ -23,8 +23,7 @@
             </div>
         </div>
     <?php else : ?>
-        <div class="border m-2 p-2 row">
-
+        <div class="border m-2 p-2">
             <div class="d-flex">
                 <div class="col-6">
                     <a href="<?= "/articles/read/" . $article->id ?>">
@@ -32,7 +31,7 @@
                         <img class="img-fluid img-thumbnail" src="<?= $article->picture_url ?>">
                     </a>
                 </div>
-                <div class="col-9 d-flex align-items-center justify-content-center">
+                <div class="col-6 d-flex align-items-center ">
                     <div>
                         <a href="<?= "/articles/read/" . $article->id ?>">
                             <h3 class="title"><?= $article->title; ?></h3>
