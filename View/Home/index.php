@@ -2,16 +2,50 @@
 
 <h2 class="post-title" id="contenu">Page d'accueil</h2>
 <div class="d-flex">
-    <section class="table-left col-6 border">
+    <section class="table-left col-8 border">
+        <h2 class="border mt-2 text-center">Les derniers articles</h2>
         <?php foreach ($articles as $article) : ?>
-            <a href="<?= "articles/read/" . $article->id ?>">
-                <h3 class="title"><?= $article->title; ?></h3>
-            </a>
-            <p><?= $article->excerpt; ?></p>
+            <?php if (empty($article->picture_url)) : ?>
+                <div class="border m-2 p-2 row">
+                    <div class="d-flex">
+                        <div class="col-12 d-flex align-items-center">
+                            <div>
+                                <a href="<?= "/articles/read/" . $article->id ?>">
+                                    <h3 class="title"><?= $article->title; ?></h3>
+                                </a>
+                                <p><?= $article->excerpt; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php else : ?>
+                <div class="border m-2 p-2">
+                    <div class="d-flex">
+                        <div class="col-7">
+                            <a href="<?= "/articles/read/" . $article->id ?>">
+
+                                <img class="img-fluid img-thumbnail" src="<?= $article->picture_url ?>">
+                            </a>
+                        </div>
+                        <div class="col-5 d-flex align-items-center ">
+                            <div>
+                                <a href="<?= "/articles/read/" . $article->id ?>">
+                                    <h3 class="title"><?= $article->title; ?></h3>
+                                </a>
+                                <p><?= $article->excerpt; ?></p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            <?php endif; ?>
+
         <?php endforeach; ?>
     </section>
     <section class="border">
-        <div class="p-3">
+        <div class="col-12 p-3">
+            <h2 class="border text-center">La vie n'est qu'une histoire... Voici la mienne</h2>
             <img class="text- pr-3" style="width: 60%;float: left" src="content/img/home.jpg"
                  alt="img-presentation"/>
             <p>Mox dicta finierat, multitudo omnis ad, quae imperator voluit, promptior laudato consilio consensit in

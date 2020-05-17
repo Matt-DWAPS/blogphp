@@ -187,8 +187,9 @@ class Article extends Model
         }
 
         if ($nbStart !== null or $nbEnd !== null) {
-            $sql .= "LIMIT " . $nbStart . ", " . $nbEnd;
+            $sql .= ' LIMIT ' . $nbStart . ", " . $nbEnd;
         }
+
         $req = $this->executeRequest($sql);
         return $req->fetchAll();
     }
