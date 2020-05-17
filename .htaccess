@@ -4,3 +4,6 @@ RewriteBase /
 RewriteEngine on
 # blog.com/home/article/1  --> blog.com/index.php?controller='home'&action='article'&id=1
 RewriteRule ^([a-zA-Z]*)?/?([a-zA-Z]*)?/?([0-9]*)?/?$ index.php?controller=$1&action=$2&id=$3 [NC,L]
+
+# Page d'erreur perso
+#ErrorDocument 404 http://blog-php.webagency-matt.com/erreur.php?code=404

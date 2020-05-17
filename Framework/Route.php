@@ -16,7 +16,6 @@ class Route
 
             $controller = $this->createController($request);
             $action = $this->createAction($request);
-
             $controller->executeAction($action);
         } catch (Exception $e) {
             $this->manageError($e);
@@ -52,6 +51,7 @@ class Route
         } else {
             throw new Exception("Fichier '$fileController' introuvable");
         }
+
     }
 
     // Détermine l'action à exécuter en fonction de la requête reçue
@@ -64,6 +64,7 @@ class Route
     private function createAction(Request $request)
     {
         $action = "index";  // Action par défaut
+
         if ($request->existsParameter('action')) {
             $action = $request->getParameter('action');
         }
@@ -74,6 +75,8 @@ class Route
     private function manageError(Exception $exception)
     {
         $vue = new View('error');
-        $vue->generate(array('msgError' => $exception->getMessage()));
+        $vue->generate(
+            array('msgError' => $exception->getMessage())
+        );
     }
 }

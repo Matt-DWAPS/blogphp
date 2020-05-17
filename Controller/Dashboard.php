@@ -198,6 +198,7 @@ class Dashboard extends Controller
 
         $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $users = $user->getUser($userId);
+        $usersBdd = $user->hydrate($users);
         $path = 'content/uploads/users/';
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -223,13 +224,17 @@ class Dashboard extends Controller
 
                     // Vérifie le type MIME du fichier
                     if (in_array($filetype, $allowed)) {
+
                         // Vérifie si le fichier existe avant de le télécharger.
                         if (file_exists($path . $_FILES["picture"]["name"])) {
                             $_SESSION['flash']['alert'] = "danger";
                             $_SESSION['flash']['message'] = $_FILES["picture"]["name"] . " existe déjà.";
                         } else {
+                            if (file_exists($user->getPicture())) {
+                                unlink($user->getPicture());
+                            }
                             move_uploaded_file($_FILES["picture"]["tmp_name"], $path . $userId . "." . $ext);
-                            $usersBdd = $user->hydrate($users);
+
                             $user->setPicture($path . $userId . "." . $ext);
                             $user->updatePictureUser();
                             $_SESSION['flash']['alert'] = "Success";
