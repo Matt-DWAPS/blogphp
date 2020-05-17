@@ -9,6 +9,18 @@ abstract class Controller
     const FROMEMAIL = 'jeanforteroche@webagency-matt.com';
     const AUTHOREMAIL = 'Jean ForteRoche';
 
+    const ALLOWED = [
+        "jpg" => "image/jpg",
+        "jpeg" => "image/jpeg",
+        "gif" => "image/gif",
+        "png" => "image/png"
+    ];
+
+    const PATH_UPLOAD = [
+        'user' => 'content/uploads/users/',
+        'article' => 'content/uploads/articles/'
+    ];
+
     const MAX_SIZE = 5 * 1024 * 1024;
 
     const ROLES = [

@@ -5,6 +5,7 @@ require_once 'Model/User.php';
 require_once 'Model/Article.php';
 require_once 'Model/Comment.php';
 require_once 'Services/Validator.php';
+require_once 'Services/Upload.php';
 
 class Dashboard extends Controller
 {
@@ -199,57 +200,12 @@ class Dashboard extends Controller
         $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $users = $user->getUser($userId);
         $usersBdd = $user->hydrate($users);
-        $path = 'content/uploads/users/';
+        $path = Controller::PATH_UPLOAD['user'];
+
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($post['pictureUpload'] == 'upload') {
-                // Vérifie si le fichier a été uploadé sans erreur.
-                if (isset($_FILES["picture"]) && $_FILES["picture"]["error"] == 0) {
-                    $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
-                    $filename = $_FILES["picture"]["name"];
-                    $filetype = $_FILES["picture"]["type"];
-                    $filesize = $_FILES["picture"]["size"];
-
-                    // Vérifie l'extension du fichier
-                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                    if (!array_key_exists($ext, $allowed)) {
-                        die("Erreur : Veuillez sélectionner un format de fichier valide.");
-                    }
-
-                    // Vérifie la taille du fichier - 5Mo maximum
-                    $maxsize = self::MAX_SIZE;
-                    if ($filesize > $maxsize) {
-                        die("Error: La taille du fichier est supérieure à la limite autorisée.");
-                    }
-
-                    // Vérifie le type MIME du fichier
-                    if (in_array($filetype, $allowed)) {
-
-                        // Vérifie si le fichier existe avant de le télécharger.
-                        if (file_exists($path . $_FILES["picture"]["name"])) {
-                            $_SESSION['flash']['alert'] = "danger";
-                            $_SESSION['flash']['message'] = $_FILES["picture"]["name"] . " existe déjà.";
-                        } else {
-                            if (file_exists($user->getPicture())) {
-                                unlink($user->getPicture());
-                            }
-                            move_uploaded_file($_FILES["picture"]["tmp_name"], $path . $userId . "." . $ext);
-
-                            $user->setPicture($path . $userId . "." . $ext);
-                            $user->updatePictureUser();
-                            $_SESSION['flash']['alert'] = "Success";
-                            $_SESSION['flash']['message'] = "Votre fichier a été téléchargé avec succès.";
-                            header('Location: /dashboard/');
-                            exit;
-                        }
-                    } else {
-                        $_SESSION['flash']['alert'] = "danger";
-                        $_SESSION['flash']['message'] = "Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer.";
-                    }
-                } else {
-                    $_SESSION['flash']['alert'] = "danger";
-                    $_SESSION['flash']['message'] = "Erreur " . $_FILES["picture"]["error"];
-                }
+                Upload::uploadPicture($user, $path);
             }
         }
         $this->generateView([
@@ -266,7 +222,7 @@ class Dashboard extends Controller
             if ($post['articleForm'] == 'addArticle') {
                 $article->setTitle($post['title']);
                 $article->setContent($post['content']);
-                $article->setPictureUrl($post['picture_url']);
+                $article->setPicture($post['picture_url']);
                 $article->setExcerpt($post['excerpt']);
                 if ($article->formArticleValidate()) {
                     if ($article->articleValidate()) {
@@ -307,11 +263,13 @@ class Dashboard extends Controller
 
         $articleId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $articles = $article->getOneArticle($articleId);
-        $path = 'content/uploads/articles/';
+        $articlesBdd = $article->hydrate($articles);
+        $path = Controller::PATH_UPLOAD['article'];
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['pictureUpload'] == 'upload') {
-                // Vérifie si le fichier a été uploadé sans erreur.
+                Upload::uploadPicture($article, $path);
+                /*// Vérifie si le fichier a été uploadé sans erreur.
                 if (isset($_FILES["picture"]) && $_FILES["picture"]["error"] == 0) {
                     $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
                     $filename = $_FILES["picture"]["name"];
@@ -335,8 +293,8 @@ class Dashboard extends Controller
                         } else {
                             move_uploaded_file($_FILES["picture"]["tmp_name"], $path . $articleId . "." . $ext);
                             $usersBdd = $article->hydrate($articles);
-                            $article->setPictureUrl($path . $articleId . "." . $ext);
-                            $article->updatePicturArticle();
+                            $article->setPicture($path . $articleId . "." . $ext);
+                            $article->updatePicture();
                             $_SESSION['flash']['alert'] = "Success";
                             $_SESSION['flash']['infos'] = "Votre fichier a été téléchargé avec succès.";
                             header('Location: /dashboard/');
@@ -349,7 +307,7 @@ class Dashboard extends Controller
                 } else {
                     $_SESSION['flash']['alert'] = "danger";
                     $_SESSION['flash']['infos'] = "Erreur " . $_FILES["picture"]["error"];
-                }
+                }*/
             }
         }
         $this->generateView([

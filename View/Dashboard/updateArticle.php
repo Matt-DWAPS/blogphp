@@ -23,7 +23,7 @@
         <p class="text-danger"><?= isset($errorsMsg['excerpt']) ? $errorsMsg['excerpt'] : ''; ?></p>
     </div>
 
-    <?php if (empty($articles->getPictureUrl())) : ?>
+    <?php if (empty($articles->getPicture())) : ?>
         <div class="form-group border rounded p-2 col-2 ">
             <label for="picture_url">Image</label><br/>
             <a class="btn btn-primary d-flex align-items-center" role="button"
@@ -35,7 +35,7 @@
         <div class="col-12 d-flex justify-content-center">
             <div class="border rounded col-6">
                 <div class="form-group  p-2  justify-content-center d-flex">
-                    <img class="img-fluid" src="<?= $articles->getPictureUrl() ?>">
+                    <img class="img-fluid" src="<?= $articles->getPicture() ?>">
 
                 </div>
                 <div class="row justify-content-center mb-3">

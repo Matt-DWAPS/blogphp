@@ -71,7 +71,7 @@ class Article extends Model
     /**
      * @return mixed
      */
-    public function getPictureUrl()
+    public function getPicture()
     {
         return $this->picture_url;
     }
@@ -79,7 +79,7 @@ class Article extends Model
     /**
      * @param mixed $picture_url
      */
-    public function setPictureUrl($picture_url)
+    public function setPicture($picture_url)
     {
         $this->picture_url = $picture_url;
     }
@@ -186,7 +186,7 @@ class Article extends Model
             $sql .= 'ORDER BY ID DESC';
         }
 
-        if ($nbStart !== null OR $nbEnd !== null) {
+        if ($nbStart !== null or $nbEnd !== null) {
             $sql .= "LIMIT " . $nbStart . ", " . $nbEnd;
         }
         $req = $this->executeRequest($sql);
@@ -211,12 +211,12 @@ class Article extends Model
             throw new Exception("Aucun article ne correspond à l'identifiant '$articleId'");
     }
 
-    public function updatePicturArticle()
+    public function updatePicture()
     {
         $sql = 'UPDATE article SET picture_url=:picture WHERE id=:id';
         $updatePicture = $this->executeRequest($sql, array(
             'id' => $this->getId(),
-            'picture' => $this->getPictureUrl()
+            'picture' => $this->getPicture()
         ));
     }
 
@@ -224,7 +224,7 @@ class Article extends Model
     {
         $sql = "INSERT INTO article(picture_url) VALUES(:picture)";
         $req = $this->executeRequest($sql, array(
-            'picture' => $this->getPictureUrl(),
+            'picture' => $this->getPicture(),
 
         ));
 
@@ -237,7 +237,7 @@ class Article extends Model
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'content' => $this->getContent(),
-            'picture_url' => $this->getPictureUrl(),
+            'picture_url' => $this->getPicture(),
             'publish' => $this->getPublish(),
             'created_at' => $this->getCreatedAt(),
             'excerpt' => $this->getExcerpt(),
@@ -311,7 +311,7 @@ class Article extends Model
 
     private function checkPictureUrl()
     {
-        if (Validator::isToUpper($this->getPictureUrl(), self::MAX_LENGTH)) {
+        if (Validator::isToUpper($this->getPicture(), self::MAX_LENGTH)) {
             $this->errors++;
             $this->errorsMsg['picture_url'] = "Titre de l'image trop long";
         }
@@ -376,7 +376,7 @@ class Article extends Model
         $this->setCreatedAt($article->created_at);
         $this->setUserId($article->user_id);
         $this->setTitle($article->title);
-        $this->setPictureUrl($article->picture_url);
+        $this->setPicture($article->picture_url);
         $this->setPublish($article->publish);
         $this->setExcerpt($article->excerpt);
         $this->setAlternativeText($article->alternative_text);
@@ -389,7 +389,7 @@ class Article extends Model
         $req = $this->executeRequest($sql, array(
             'title' => $this->getTitle(),
             'content' => $this->getContent(),
-            'picture_url' => $this->getPictureUrl(),
+            'picture_url' => $this->getPicture(),
             'publish' => $this->getPublish(),
             'created_at' => $this->getCreatedAt(),
             'excerpt' => $this->getExcerpt(),

@@ -307,7 +307,7 @@ class User extends Model
         ));
     }
 
-    public function updatePictureUser()
+    public function updatePicture()
     {
         $sql = 'UPDATE user SET picture=:picture WHERE id=:id';
         $updatePicture = $this->executeRequest($sql, array(
