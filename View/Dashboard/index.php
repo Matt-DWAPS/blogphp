@@ -16,11 +16,12 @@ $this->title = "Espace membre"; ?>
         <table class="table">
             <thead>
             <tr>
-                <th scope="col" class="text-center">Date d'inscriptions</th>
-                <th scope="col">Pseudos</th>
-                <th scope="col">Adresses emails</th>
-                <th scope="col">Rôles</th>
-                <th scope="col">Statuts</th>
+                <th scope="col" class="text-center">Date d'inscription</th>
+                <th scope="col"></th>
+                <th scope="col">Pseudo</th>
+                <th scope="col">Adresses email</th>
+                <th scope="col">Rôle</th>
+                <th scope="col">Statut</th>
                 <th scope="col" class="text-center">Modifier</th>
             </tr>
             </thead>
@@ -30,6 +31,13 @@ $this->title = "Espace membre"; ?>
                 ?>
                 <tr>
                     <td class="text-center"><?= $createAt->format('d-m-Y'); ?></td>
+                    <?php if (empty($user->getPicture())) : ?>
+                        <td>
+                            <i class="img-fluid icon-user-dashboard fas fa-user fa-6x"></i>
+                        </td>
+                    <?php else: ?>
+                        <td><img class="img-fluid img-user-dashboard" src="<?= $user->getPicture() ?>"></td>
+                    <?php endif; ?>
                     <td><?= $user->getUsername() ?></td>
                     <td><?= $user->getEmail() ?></td>
                     <td><?php

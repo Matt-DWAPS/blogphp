@@ -503,7 +503,7 @@ class User extends Model
 
     public function getAllUserDashboard()
     {
-        $sql = 'SELECT id, username, email, password, role, status, created_at FROM user';
+        $sql = 'SELECT id, username, email, password, role, status, created_at, picture FROM user';
         $req = $this->executeRequest($sql);
         return $req->fetchAll();
     }
