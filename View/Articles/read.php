@@ -98,13 +98,13 @@
                     <?php endif; ?>
 
                 </div>
-
-
-                <div class="input d-flex justify-content-end">
-                    <a class=" btn-link text-danger" role="button"
-                       href="<?= "articles/reportComment/" . $comment->id ?>">Signaler
-                        le commentaire</a>
-                </div>
+                <?php if (isset($_SESSION['auth'])) : ?>
+                    <div class="input d-flex justify-content-end">
+                        <a class=" btn-link text-danger" role="button"
+                           href="<?= "articles/reportComment/" . $comment->id ?>">Signaler
+                            le commentaire</a>
+                    </div>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>
