@@ -16,7 +16,6 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
           rel='stylesheet' type='text/css'>
     <!-- Custom styles for this template -->
-    <link href="css/clean-blog.min.css" rel="stylesheet">
     <link href="content/stylesheet.css" rel="stylesheet">
     <script src="https://cdn.tiny.cloud/1/49s9oa4srxghsf6ebhhz6m8a6w371i26nguo29xxy67x836y/tinymce/5/tinymce.min.js"
             referrerpolicy="origin"></script>
@@ -69,7 +68,7 @@
 <header class="masthead  m-0">
 
     <div class="heading">
-        <img width="100%" src="content/img/header.jpg">
+        <img class="w-100" alt="montagne" src="content/img/header.jpg">
     </div>
 </header>
 
@@ -132,6 +131,7 @@
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</div>
 </body>
 
 </html>

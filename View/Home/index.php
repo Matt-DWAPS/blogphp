@@ -24,7 +24,8 @@
                         <div class="col-7">
                             <a href="<?= "/articles/read/" . $article->id ?>">
 
-                                <img class="img-fluid img-thumbnail" src="<?= $article->picture_url ?>">
+                                <img alt="picture article" class="img-fluid img-thumbnail"
+                                     src="<?= $article->picture_url ?>">
                             </a>
                         </div>
                         <div class="col-5 d-flex align-items-center ">
