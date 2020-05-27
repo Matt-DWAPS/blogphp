@@ -97,4 +97,5 @@ $this->title = "Utilisateur"; ?>
                 <input class="btn btn-primary" type="submit" name="saveUpdate" value="Enregistrer les modifications">
             </div>
         </div>
+    </div>
 </form>
