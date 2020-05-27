@@ -102,7 +102,7 @@ class Dashboard extends Controller
         $comments = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
         $roles = self::ROLES;
 
-        
+
         $this->generateView([
             'articles' => $articles,
             'users' => $users,
@@ -199,7 +199,7 @@ class Dashboard extends Controller
 
         $userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $users = $user->getUser($userId);
-        $usersBdd = $user->hydrate($users);
+        $user->hydrate($users);
         $path = Controller::PATH_UPLOAD['user'];
 
 
@@ -263,7 +263,7 @@ class Dashboard extends Controller
 
         $articleId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $articles = $article->getOneArticle($articleId);
-        $articlesBdd = $article->hydrate($articles);
+        $article->hydrate($articles);
         $path = Controller::PATH_UPLOAD['article'];
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

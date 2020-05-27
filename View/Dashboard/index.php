@@ -30,7 +30,7 @@ $this->title = "Espace membre"; ?>
                 $createAt = new DateTime($user->getCreatedAt());
                 ?>
                 <tr>
-                    <td class="text-center"><?= $createAt->format('d-m-Y'); ?></td>
+                    <th scope="row" class="text-center"><?= $createAt->format('d-m-Y'); ?></th>
                     <?php if (empty($user->getPicture())) : ?>
                         <td>
                             <i class="img-fluid icon-user-dashboard fas fa-user fa-6x"></i>
@@ -93,8 +93,9 @@ $this->title = "Espace membre"; ?>
             <tbody>
             <tr><?php foreach ($articles
 
-                as $article) : ?>
-                <th scope="row" class="text-center"><?= $article->created_at ?></th>
+                as $article) :
+                $createAt = new DateTime($article->created_at); ?>
+                <th scope="row" class="text-center"><?= $createAt->format('d-m-Y'); ?></th>
                 <td><?= $article->title ?></td>
                 <td><?= $article->excerpt ?></td>
                 <?php if (empty($article->picture_url)) : ?>
@@ -153,8 +154,10 @@ $this->title = "Espace membre"; ?>
                 <tr class="border">
                     <?php foreach ($comments
 
-                    as $comment) : ?>
-                    <th scope="row"><?= $comment->created_at ?></th>
+                    as $comment) :
+                    $createAt = new DateTime($comment->created_at); ?>
+
+                    <th scope="row"><?= $createAt->format('d-m-Y'); ?></th>
                     <td><?= $comment->username ?></td>
                     <td><?= $comment->content ?></td>
                     <td><?= $comment->title ?></td>
