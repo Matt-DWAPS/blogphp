@@ -18,8 +18,9 @@
     <!-- Custom styles for this template -->
     <link href="css/clean-blog.min.css" rel="stylesheet">
     <link href="content/stylesheet.css" rel="stylesheet">
-
-
+    <script src="https://cdn.tiny.cloud/1/49s9oa4srxghsf6ebhhz6m8a6w371i26nguo29xxy67x836y/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script>tinymce.init({selector: 'textarea', language: 'fr_FR'});</script>
 </head>
 <body>
 <!-- Navigation -->
@@ -128,7 +129,6 @@
             </div>
         </div>
     </footer>
-
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
