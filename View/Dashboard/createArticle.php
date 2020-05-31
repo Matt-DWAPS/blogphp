@@ -11,7 +11,7 @@
     <br/>
     <div class="form-group">
         <label for="content inputlg comment">Contenu de l'article</label>
-        <textarea aria-label="content" class="form-control input-lg" rows="5" id="content"
+        <textarea aria-label="content" class="form-control input-lg tynimce" rows="5" id="content"
                   name="content"><?= isset($post['content']) ? $post['content'] : ''; ?></textarea>
         <p class="text-danger"><?= isset($errorsMsg['content']) ? $errorsMsg['content'] : ''; ?></p>
     </div>

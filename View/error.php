@@ -2,12 +2,13 @@
 
 <h2 class="post-title" id="contenu">Page d'accueil</h2>
 <div class="d-flex">
-    <section class="table-left col-6 border">
-        <p>Error</p>
+    <section class="table-left col-6 border text-center">
+        <p>404 Not Found</p>
+        <p>La page demandée n'existe pas ou n'a pu être trouvée</p>
     </section>
     <section class="border">
         <div class="p-3">
-            <img class="text- pr-3" style="width: 60%;float: left" src="content/img/home.jpg"
+            <img class="error-page text- pr-3" src="content/img/home.jpg"
                  alt="img-presentation"/>
             <p>Mox dicta finierat, multitudo omnis ad, quae imperator voluit, promptior laudato consilio consensit in
                 pacem ea ratione maxime percita, quod norat expeditionibus crebris fortunam eius in malis tantum

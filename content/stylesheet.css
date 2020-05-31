@@ -1,3 +1,13 @@
 .img-user-dashboard {
     max-width: 85px;
 }
+
+.img-home {
+    width: 60%;
+    float: left;
+}
+
+.error-page {
+    width: 60%;
+    float: left;
+}

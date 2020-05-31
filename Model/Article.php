@@ -176,19 +176,22 @@ class Article extends Model
     {
         $sql = 'SELECT * FROM article ';
 
-        if ($publish != null) {
-            $sql .= 'WHERE publish =:publish ORDER BY ID DESC ';
+        if ($publish != null && $nbStart !== null or $nbEnd !== null) {
+            $sql .= "WHERE publish =:publish ORDER BY ID DESC LIMIT " . $nbStart . "," . $nbEnd;
+            
+            $req = $this->executeRequest($sql, array(
+                'publish' => $publish,
+            ));
+
+            return $req->fetchAll();
+        } elseif ($publish != null) {
+            $sql .= "WHERE publish =:publish ORDER BY ID DESC";
             $req = $this->executeRequest($sql, array(
                 'publish' => $publish,
             ));
             return $req->fetchAll();
-        } else {
-            $sql .= 'ORDER BY ID DESC';
         }
 
-        if ($nbStart !== null or $nbEnd !== null) {
-            $sql .= ' LIMIT ' . $nbStart . ", " . $nbEnd;
-        }
 
         $req = $this->executeRequest($sql);
         return $req->fetchAll();

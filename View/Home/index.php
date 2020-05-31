@@ -21,14 +21,14 @@
             <?php else : ?>
                 <div class="border m-2 p-2">
                     <div class="d-flex">
-                        <div class="col-7">
+                        <div class="col-7 col-md-5">
                             <a href="<?= "/articles/read/" . $article->id ?>">
 
                                 <img alt="picture article" class="img-fluid img-thumbnail"
                                      src="<?= $article->picture_url ?>">
                             </a>
                         </div>
-                        <div class="col-5 d-flex align-items-center ">
+                        <div class="col-5 col-md-6 d-flex align-items-center ">
                             <div>
                                 <a href="<?= "/articles/read/" . $article->id ?>">
                                     <h3 class="title"><?= $article->title; ?></h3>
@@ -41,13 +41,12 @@
 
                 </div>
             <?php endif; ?>
-
         <?php endforeach; ?>
     </section>
     <section class="border">
         <div class="col-12 p-3">
             <h2 class="border text-center">La vie n'est qu'une histoire... Voici la mienne</h2>
-            <img class="text- pr-3" style="width: 60%;float: left" src="content/img/home.jpg"
+            <img class="text- pr-3 img-home" src="content/img/home.jpg"
                  alt="img-presentation"/>
             <p>Mox dicta finierat, multitudo omnis ad, quae imperator voluit, promptior laudato consilio consensit in
                 pacem ea ratione maxime percita, quod norat expeditionibus crebris fortunam eius in malis tantum

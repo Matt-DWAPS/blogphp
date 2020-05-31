@@ -19,7 +19,7 @@
     <link href="content/stylesheet.css" rel="stylesheet">
     <script src="https://cdn.tiny.cloud/1/49s9oa4srxghsf6ebhhz6m8a6w371i26nguo29xxy67x836y/tinymce/5/tinymce.min.js"
             referrerpolicy="origin"></script>
-    <script>tinymce.init({selector: 'textarea', language: 'fr_FR'});</script>
+    <script>tinymce.init({selector: '.tynimce', language: 'fr_FR', plugins: 'image'});</script>
 </head>
 <body>
 <!-- Navigation -->
@@ -64,9 +64,9 @@
         </div>
     </div>
 </nav>
+
 <!-- Page Header -->
 <header class="masthead  m-0">
-
     <div class="heading">
         <img class="w-100" alt="montagne" src="content/img/header.jpg">
     </div>
@@ -77,7 +77,6 @@
     <div class="row">
         <div class="col-lg-12 col-md-10 mx-auto">
             <div class="post-preview">
-
                 <?php if (isset($_SESSION['flash'])) : ?>
                     <div class="alert alert-<?= $_SESSION['flash']['alert']; ?>">
                         <p><?= $_SESSION['flash']['message']; ?></p>

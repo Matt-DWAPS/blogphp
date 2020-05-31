@@ -7,12 +7,12 @@
         <input class="form-control input-lg" type="text" id="title" name="title"
                placeholder="Modifier le titre de l'article : "
                value="<?= $articles->getTitle(); ?>"/>
-        <p style="color: red"><?= isset($errorsMsg['title']) ? $errorsMsg['title'] : ''; ?></p>
+        <p class="text-danger"><?= isset($errorsMsg['title']) ? $errorsMsg['title'] : ''; ?></p>
     </div>
     <br/>
     <div class="form-group">
         <label for="content inputlg">Modifier le contenu de l'article</label>
-        <textarea aria-label="content" class="form-control input-lg" rows="5" id="content"
+        <textarea aria-label="content" class="form-control input-lg tynimce" rows="5" id="content"
                   name="content"><?= $articles->getContent(); ?></textarea>
         <p class="text-danger"><?= isset($errorsMsg['content']) ? $errorsMsg['content'] : ''; ?></p>
     </div>

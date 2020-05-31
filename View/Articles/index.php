@@ -17,7 +17,7 @@
                         <a href="<?= "/articles/read/" . $article->id ?>">
                             <h3 class="title"><?= $article->title; ?></h3>
                         </a>
-                        <p><?= $article->content; ?></p>
+                        <p><?= $article->excerpt; ?></p>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                         <a href="<?= "/articles/read/" . $article->id ?>">
                             <h3 class="title"><?= $article->title; ?></h3>
                         </a>
-                        <p><?= $article->content; ?></p>
+                        <p><?= $article->excerpt; ?></p>
                     </div>
 
                 </div>

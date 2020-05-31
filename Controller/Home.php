@@ -30,10 +30,12 @@ class Home extends Controller
     public function index()
     {
         $article = new Article();
-        $articles = $article->getAllArticles(self::PUBLISH['PUBLIÉ']);
+
+        $articles = $article->getAllArticles(self::PUBLISH['PUBLIÉ'], 1, 3);
 
         $this->generateView([
             'articles' => $articles,
+            'nbPage' => $nbPage,
         ]);
     }
 
