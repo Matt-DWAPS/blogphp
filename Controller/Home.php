@@ -204,6 +204,7 @@ class Home extends Controller
     {
         $user = new User();
         $post = isset($_POST) ? $_POST : false;
+        $role = $user->getRole();
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($post['loginForm'] == 'login') {
@@ -213,6 +214,14 @@ class Home extends Controller
                     $userBdd = $user->getUserInBdd(self::STATUS['ACTIF']);
                     if ($userBdd) {
                         $user->hydrate($userBdd);
+                        $role = $user->getRole();
+
+                        if ($role = 0) {
+                            $_SESSION['flash']['alert'] = "danger";
+                            $_SESSION['flash']['message'] = "Connexion impossible";
+                            header('Location: /dashboard/disconnected');
+                            exit;
+                        }
                         if ($user->login()) {
                             $_SESSION['auth']['username'] = $user->getUsername();
                             $_SESSION['auth']['picture'] = $user->getPicture();
@@ -223,8 +232,13 @@ class Home extends Controller
                             $_SESSION['auth']['id'] = $user->getId();
                             $_SESSION['auth']['token'] = $user->getToken();
 
+
                             $_SESSION['flash']['alert'] = "success";
                             $_SESSION['flash']['message'] = "Bienvenue";
+                            if ($_SESSION['auth']['role'] == '10') {
+                                $_SESSION['flash']['alert'] = "danger";
+                                $_SESSION['flash']['message'] = "Veuillez valider votre adresse email afin d'acceder a toutes les fonctionnalités";
+                            }
                             header('Location: /dashboard');
                             exit();
                         } else {

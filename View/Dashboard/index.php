@@ -178,19 +178,7 @@ $this->title = "Espace membre"; ?>
     <form method="post">
         <div class="border rounded p-3 pb-5 col-12">
             <div class="row p-2 m-2">
-                <?php if (empty($user->getPicture())) : ?>
-                    <div class="border rounded p-2 col-3">
-                        <div class="d-flex justify-content-center border p-2">
-                            <i class="fas fa-user fa-10x"></i>
-                        </div>
-                        <div class="border col mt-3 p-2">
-                            <a class="btn btn-primary" role="button"
-                               href="<?= "dashboard/pictureUpload/" . $user->getId() ?>">
-                                Ajouter
-                                une photo de profil</a>
-                        </div>
-                    </div>
-                <?php else: ?>
+                <?php if (!empty($user->getPicture())) : ?>
                     <div class="border rounded p-2 col-3">
                         <div class="d-flex justify-content-center border p-2">
                             <img class="img-fluid" src="<?= $user->getPicture() ?>">
@@ -200,6 +188,21 @@ $this->title = "Espace membre"; ?>
                                href="<?= "dashboard/pictureUpload/" . $user->getId() ?>">
                                 Modifier la photo de profil</a>
                         </div>
+                    </div>
+                <?php else: ?>
+                    <div class="border rounded p-2 col-3">
+                        <div class="d-flex justify-content-center border p-2">
+                            <i class="fas fa-user fa-10x"></i>
+                        </div>
+                        <?php if (isset($_SESSION['auth']) && $_SESSION['auth']['role'] >= '20') : ?>
+
+                            <div class="border col mt-3 p-2">
+                                <a class="btn btn-primary" role="button"
+                                   href="<?= "dashboard/pictureUpload/" . $user->getId() ?>">
+                                    Ajouter
+                                    une photo de profil</a>
+                            </div>
+                        <? endif; ?>
                     </div>
                 <?php endif; ?>
                 <div class="col">
@@ -214,14 +217,16 @@ $this->title = "Espace membre"; ?>
                             <label for="username">Nom d'utilisateur :</label>
                             <input class="form-control" type="text" id="username" name="username"
                                    value="<?= isset($post['username']) ? $post['username
-                       '] : $user->getUsername(); ?>">
+                       '] : $user->getUsername(); ?> "
+                                   <?php if (isset($_SESSION['auth']) && $_SESSION['auth']['role'] <= '10') : ?>readonly<? endif; ?>>
                             <p class="text-danger"><?= isset($errorsMsg['username']) ? $errorsMsg['username'] : ''; ?></p>
                         </div>
                         <div class="col">
                             <label for="email">Adresse email :</label>
                             <input class="form-control" type="email" id="email" name="email"
                                    value="<?= isset($post['email']) ? $post['email
-                       '] : $user->getEmail(); ?>">
+                       '] : $user->getEmail(); ?>"
+                                   <?php if (isset($_SESSION['auth']) && $_SESSION['auth']['role'] <= '10') : ?>readonly<? endif; ?>>
 
                             <p class="text-danger"><?= isset($errorsMsg['email']) ? $errorsMsg['email'] : ''; ?></p>
 
@@ -252,23 +257,26 @@ $this->title = "Espace membre"; ?>
                                            $role = 'Rôle non défini';
                                    } ?><?= $role ?>" readonly/>
                         </div>
-                        <div class="col-6 text-center pt-4">
-
-                            <a class="btn btn-primary" role="button"
-                               href="<?= "dashboard/updatePasswordUser/" . $user->getId() ?>">Modifier le mot de
-                                passe</a>
-
-                        </div>
+                        <?php if (isset($_SESSION['auth']) && $_SESSION['auth']['role'] >= '20') : ?>
+                            <div class="col-6 text-center pt-4">
+                                <a class="btn btn-primary" role="button"
+                                   href="<?= "dashboard/updatePasswordUser/" . $user->getId() ?>">Modifier le mot de
+                                    passe</a>
+                            </div>
+                        <? endif; ?>
                     </div>
                 </div>
             </div>
-            <div class="row mt-3">
-                <div class="col text-right">
-                    <input type="hidden" name="userForm" value="updateUser"/>
-                    <input class="btn btn-primary" type="submit" name="saveUpdate"
-                           value="Enregistrer les modifications">
+            <?php if (isset($_SESSION['auth']) && $_SESSION['auth']['role'] >= '20') : ?>
+                <div class="row mt-3">
+                    <div class="col text-right">
+                        <input type="hidden" name="userForm" value="updateUser"/>
+                        <input class="btn btn-primary" type="submit" name="saveUpdate"
+                               value="Enregistrer les modifications">
+                    </div>
                 </div>
-            </div>
+            <? endif; ?>
+        </div>
     </form>
     <div class="commentsConfirmed">
         <h2>Mes commentaires postés</h2>

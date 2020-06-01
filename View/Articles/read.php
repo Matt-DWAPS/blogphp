@@ -11,10 +11,11 @@
         <h1 class="title pb-3 p-2"><i><?= $articles->title ?></i></h1>
         <p class="text-justify pb-2 p-4"><?= $articles->content ?></p>
         <div class="col">
-            <p class="font-weight-bold">Publié le <?= $articles->created_at ?></p>
+            <?php $date = new DateTime($articles->date); ?>
+            <p class="font-weight-bold">Publié le <?= $date->format('d-m-Y'); ?> à <?= $date->format('h:i:s'); ?></p>
         </div>
     </div>
-    <?php if (isset($_SESSION['auth'])) : ?>
+    <?php if (isset($_SESSION['auth']) && $_SESSION['AUTH']['role'] >= '20') : ?>
         <div>
             <form method="post" class="border p-2">
 
@@ -53,9 +54,14 @@
                 <input class="btn btn-primary" name="publish" type="submit" value="Envoyer">
             </form>
         </div>
+    <?php elseif (isset($_SESSION['auth']) && $_SESSION['AUTH']['role'] == 0) : ?>
+        <div class="border p-2 text-center">
+            <h3 class="text-center">Vous êtes banni, vous ne pouvez pas posté de commentaires</h3>
+            <a href="/home/contact">Contactez-nous</a>
+        </div>
     <?php else : ?>
         <div class="border p-2 text-center">
-            <h3 class="text-center">Identifier vous pour pouvoir posté un commentaire, merci.</h3>
+            <h3 class="text-center">Identifiez vous pour pouvoir posté un commentaire, merci.</h3>
             <a href="/home/login">Connexion</a> - <a href="/home/registration">Inscription</a>
         </div>
     <?php endif; ?>
@@ -98,7 +104,7 @@
                     <?php endif; ?>
 
                 </div>
-                <?php if (isset($_SESSION['auth'])) : ?>
+                <?php if (isset($_SESSION['auth']) && $_SESSION['AUTH']['role'] >= '20') : ?>
                     <div class="input d-flex justify-content-end">
                         <a class=" btn-link text-danger" role="button"
                            href="<?= "articles/reportComment/" . $comment->id ?>">Signaler

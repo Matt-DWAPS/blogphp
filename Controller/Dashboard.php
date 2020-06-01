@@ -20,7 +20,32 @@ class Dashboard extends Controller
         if (!isset($_SESSION['auth'])) {
             header('Location: /home');
             exit();
-        } elseif (isset($_SESSION['auth']) && $_SESSION['auth']['role'] == '20') {
+        } elseif (isset($_SESSION['auth']) && $_SESSION['auth']['role'] >= '75') {
+            $user = new User();
+            $usersBdd = $user->getAllUserDashboard();
+
+            $users = array();
+
+            foreach ($usersBdd as $userBdd) {
+                $user = new User;
+                $user->hydrate($userBdd);
+                $users[] = $user;
+            }
+
+
+            $article = new Article();
+            $articles = $article->getAllArticles();
+            $comment = new Comment();
+            $comments = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
+            $roles = self::ROLES;
+
+
+            $this->generateView([
+                'articles' => $articles,
+                'users' => $users,
+                'comments' => $comments,
+            ]);
+        } else {
             $post = isset($_POST) ? $_POST : false;
             $roles = self::ROLES;
             $user_status = self::STATUS;
@@ -82,32 +107,7 @@ class Dashboard extends Controller
                 'reported' => $commentsReported,
                 'errorsMsg' => $user->getErrorsMsg()
             ]);
-            exit();
         }
-        $user = new User();
-        $usersBdd = $user->getAllUserDashboard();
-
-        $users = array();
-
-        foreach ($usersBdd as $userBdd) {
-            $user = new User;
-            $user->hydrate($userBdd);
-            $users[] = $user;
-        }
-
-
-        $article = new Article();
-        $articles = $article->getAllArticles();
-        $comment = new Comment();
-        $comments = $comment->getPendingComments(self::COMMENT_STATUS['EN ATTENTE']);
-        $roles = self::ROLES;
-
-
-        $this->generateView([
-            'articles' => $articles,
-            'users' => $users,
-            'comments' => $comments,
-        ]);
     }
 
     public function updatePasswordUser()
