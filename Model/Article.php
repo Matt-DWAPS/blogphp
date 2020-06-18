@@ -178,7 +178,7 @@ class Article extends Model
 
         if ($publish != null && $nbStart !== null or $nbEnd !== null) {
             $sql .= "WHERE publish =:publish ORDER BY ID DESC LIMIT " . $nbStart . "," . $nbEnd;
-            
+
             $req = $this->executeRequest($sql, array(
                 'publish' => $publish,
             ));
@@ -258,7 +258,7 @@ class Article extends Model
 
         $sql = 'DELETE FROM article WHERE id =:id';
         $deleteArticle = $this->executeRequest($sql, array(
-            'id' => $this->getId(),
+            'id' => $articleId,
         ));
     }
 

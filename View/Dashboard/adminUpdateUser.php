@@ -6,7 +6,7 @@
 $this->title = "Utilisateur"; ?>
 <?php if (isset($_SESSION['flash'])) : ?>
     <p class="text-center font-weight-bold text-success alert alert-<?= $_SESSION['flash']['alert']; ?>">
-        <?= $_SESSION['flash']['message']; ?></p>
+        <?= $_SESSION['flash']['messages']; ?></p>
 <?php endif; ?>
 <h2 class="post-title" id="contenu">Informations utilisateur</h2>
 

@@ -173,10 +173,10 @@ class Dashboard extends Controller
                     if (!array_key_exists('id', $emailInBdd) && !array_key_exists('id', $usernameInBdd)) {
                         $user->updateUser();
                         $_SESSION['flash']['alert'] = "Success";
-                        $_SESSION['flash']['message'] = "Modification effectué avec succès !";
+                        $_SESSION['flash']['messages'] = "Modification effectué avec succès !";
                     } else {
                         $_SESSION['flash']['alert'] = "danger";
-                        $_SESSION['flash']['message'] = "Le nom d'utilisateur ou l'adresse email existe déjà";
+                        $_SESSION['flash']['messages'] = "Le nom d'utilisateur ou l'adresse email existe déjà";
                     }
                 }
             }
