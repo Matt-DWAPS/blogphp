@@ -11,7 +11,7 @@
         <h1 class="title pb-3 p-2"><i><?= $articles->title ?></i></h1>
         <p class="text-justify pb-2 p-4"><?= $articles->content ?></p>
         <div class="col">
-            <?php $date = new DateTime($articles->date); ?>
+            <?php $date = new DateTime($articles->created_at); ?>
             <p class="font-weight-bold">Publié le <?= $date->format('d-m-Y'); ?> à <?= $date->format('h:i:s'); ?></p>
         </div>
     </div>
