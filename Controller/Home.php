@@ -35,7 +35,7 @@ class Home extends Controller
 
         $this->generateView([
             'articles' => $articles,
-            'nbPage' => $nbPage,
+
         ]);
     }
 
@@ -215,8 +215,8 @@ class Home extends Controller
                     if ($userBdd) {
                         $user->hydrate($userBdd);
                         $role = $user->getRole();
-
-                        if ($role = 0) {
+                        
+                        if ($role == self::ROLES['BANNI']) {
                             $_SESSION['flash']['alert'] = "danger";
                             $_SESSION['flash']['message'] = "Connexion impossible";
                             header('Location: /dashboard/disconnected');
