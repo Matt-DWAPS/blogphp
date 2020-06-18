@@ -33,6 +33,7 @@ class Articles extends Controller
         $article->hydrate($article->getOneArticle($articleId));
         $userId = $_SESSION['auth']['id'];
 
+        
         $comment = new Comment();
         $comments = $comment->getComments($article->getId(), self::COMMENT_STATUS['PUBLIÉ']);
 

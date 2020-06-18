@@ -15,7 +15,7 @@
             <p class="font-weight-bold">Publié le <?= $date->format('d-m-Y'); ?> à <?= $date->format('h:i:s'); ?></p>
         </div>
     </div>
-    <?php if (isset($_SESSION['auth']) && $_SESSION['AUTH']['role'] >= '20') : ?>
+    <?php if (isset($_SESSION['auth']) && $_SESSION['auth']['role'] >= '20') : ?>
         <div>
             <form method="post" class="border p-2">
 
@@ -54,10 +54,14 @@
                 <input class="btn btn-primary" name="publish" type="submit" value="Envoyer">
             </form>
         </div>
-    <?php elseif (isset($_SESSION['auth']) && $_SESSION['AUTH']['role'] == 0) : ?>
+    <?php elseif (isset($_SESSION['auth']) && $_SESSION['auth']['role'] == '0') : ?>
         <div class="border p-2 text-center">
             <h3 class="text-center">Vous êtes banni, vous ne pouvez pas posté de commentaires</h3>
             <a href="/home/contact">Contactez-nous</a>
+        </div>
+    <?php elseif (isset($_SESSION['auth']) && $_SESSION['auth']['role'] == '10') : ?>
+        <div class="border p-2 text-center">
+            <h3 class="text-center">Veuillez valider votre adresse email si vous souhaitez posté un commentaires</h3>
         </div>
     <?php else : ?>
         <div class="border p-2 text-center">
