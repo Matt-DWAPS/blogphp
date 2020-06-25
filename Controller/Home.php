@@ -156,50 +156,6 @@ class Home extends Controller
     /**
      * @throws Exception
      */
-    public function forgottenPassword()
-    {
-        $user = new User();
-        $get = isset($_GET) ? $_GET : false;
-        $post = isset($_POST) ? $_POST : false;
-
-        $user->setEmail($get['email']);
-        $user->setToken($get['token']);
-
-        $userEmail = $user->getEmail();
-        $userBdd = $user->getEmailAndTokenUserInBdd($userEmail);
-        if ($userBdd) {
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                if ($post['passwordForm'] == 'newPassword') {
-                    $user->setpassword($post['password']);
-                    $user->setCPassword($post['cPassword']);
-                    if ($user->formNewPasswordValidate()) {
-                        $user->generateToken();
-                        $data = [
-                            'username' => $user->getUsername(),
-                            'email' => $user->getEmail(),
-                            'token' => $user->getToken()
-                        ];
-                        $user->updatePassword();
-                        $this->sendEmail('newPassword', 'Modification de votre compte sur le blog Jean ForteRoche', $user->getEmail(), $data);
-
-                        $_SESSION['flash']['alert'] = "success";
-                        $_SESSION['flash']['message'] = "Vous pouvez dès à présent vous connecter avec votre nouveau mot de passe";
-                        header('Location: /home/login');
-                        exit();
-                    }
-                }
-            }
-        }
-        $this->generateView([
-            'errorsMsg' => $user->getErrorsMsg(),
-            'post' => $post
-        ]);
-    }
-
-
-    /**
-     * @throws Exception
-     */
     public function login()
     {
         $user = new User();
@@ -215,7 +171,7 @@ class Home extends Controller
                     if ($userBdd) {
                         $user->hydrate($userBdd);
                         $role = $user->getRole();
-                        
+
                         if ($role == self::ROLES['BANNI']) {
                             $_SESSION['flash']['alert'] = "danger";
                             $_SESSION['flash']['message'] = "Connexion impossible";
@@ -294,4 +250,48 @@ class Home extends Controller
             'post' => $post,
         ]);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function forgottenPassword()
+    {
+        $user = new User();
+        $get = isset($_GET) ? $_GET : false;
+        $post = isset($_POST) ? $_POST : false;
+
+        $user->setEmail($get['email']);
+        $user->setToken($get['token']);
+
+        $userEmail = $user->getEmail();
+        $userBdd = $user->getEmailAndTokenUserInBdd($userEmail);
+        if ($userBdd) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($post['passwordForm'] == 'newPassword') {
+                    $user->setpassword($post['password']);
+                    $user->setCPassword($post['cPassword']);
+                    if ($user->formNewPasswordValidate()) {
+                        $user->generateToken();
+                        $data = [
+                            'username' => $user->getUsername(),
+                            'email' => $user->getEmail(),
+                            'token' => $user->getToken()
+                        ];
+                        $user->updatePassword();
+                        $this->sendEmail('newPassword', 'Modification de votre compte sur le blog Jean ForteRoche', $user->getEmail(), $data);
+
+                        $_SESSION['flash']['alert'] = "success";
+                        $_SESSION['flash']['message'] = "Vous pouvez dès à présent vous connecter avec votre nouveau mot de passe";
+                        header('Location: /home/login');
+                        exit();
+                    }
+                }
+            }
+        }
+        $this->generateView([
+            'errorsMsg' => $user->getErrorsMsg(),
+            'post' => $post
+        ]);
+    }
+
 }
